@@ -42,11 +42,12 @@ public class HelloItemizedOverlay extends ItemizedOverlay {
 	}
 	
 	protected boolean onTap(int index) {
-		OverlayItem item = mOverlayItems.get(index);
-		AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-		dialog.setTitle(item.getPoint().toString());
-		dialog.show();
-		return true;
+		// Removed functionality until we need it
+//		OverlayItem item = mOverlayItems.get(index);
+//		AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+//		dialog.setTitle(item.getPoint().toString());
+//		dialog.show();
+		return true; // Return true to avoid adding points on top of existing points
 	}
 	
 	public boolean onTap (final GeoPoint p, final MapView mapView) {

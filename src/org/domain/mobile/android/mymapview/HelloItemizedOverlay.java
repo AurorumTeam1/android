@@ -57,7 +57,7 @@ public class HelloItemizedOverlay extends ItemizedOverlay {
         }
         OverlayItem overlayItem = new OverlayItem(p, "", "");
         this.addOverlay(overlayItem);
-        mapView.getOverlays().add(this);
+        populate();
         return true;
     }
 	

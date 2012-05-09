@@ -19,6 +19,7 @@ public class HelloItemizedOverlay extends ItemizedOverlay {
 	private ArrayList<OverlayItem> mOverlayItems = new ArrayList<OverlayItem>();
 	private Context mContext;
 	private boolean isPinch;
+	private Area area = new Area();
 
 	public HelloItemizedOverlay(Drawable defaultMarker) {
 		super(boundCenterBottom(defaultMarker));
@@ -30,6 +31,7 @@ public class HelloItemizedOverlay extends ItemizedOverlay {
 	}
 	
 	public void addOverlay(OverlayItem overlayItem) {
+		area.addPoint(overlayItem.getPoint());
 		mOverlayItems.add(overlayItem);
 		populate();
 	}

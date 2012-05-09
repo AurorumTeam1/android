@@ -1,9 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.maps.MapView
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mapview"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:clickable="true"
-    android:apiKey="@string/mapViewApiKey"
-/>
+    android:id="@+id/edit_event"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="@style/EditEvent_Layout">
+    
+    <!-- 
+    <TextView
+        android:id="@+id/loading_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/loading"
+        style="?android:attr/textAppearanceLarge"
+        android:background="#FFFFFFFF"/>
+    -->
+
+	<include
+		layout="@layout/edit_area_custom_actionbar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" />
+	<com.google.android.maps.MapView
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/mapview"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:clickable="true"
+	    android:apiKey="@string/mapViewApiKey"
+	/>
+
+	
+</LinearLayout>	

@@ -3,5 +3,8 @@
 
     <string name="hello">Hello World, MyMapViewActivity!</string>
     <string name="app_name">MyMapView</string>
-
+    <string name="discard_label">CANCEL</string>
+    <string name="save_label">DONE</string>
+    <string name="loading">Loading...</string>
+    
 </resources>

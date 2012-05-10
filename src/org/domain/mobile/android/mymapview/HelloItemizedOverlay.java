@@ -1,5 +1,6 @@
 package org.domain.mobile.android.mymapview;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,12 +15,11 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
-public class HelloItemizedOverlay extends ItemizedOverlay {
+public class HelloItemizedOverlay extends ItemizedOverlay implements Serializable {
 	
 	private ArrayList<OverlayItem> mOverlayItems = new ArrayList<OverlayItem>();
 	private Context mContext;
 	private boolean isPinch;
-	private Area area = new Area();
 
 	public HelloItemizedOverlay(Drawable defaultMarker) {
 		super(boundCenterBottom(defaultMarker));
@@ -31,7 +31,6 @@ public class HelloItemizedOverlay extends ItemizedOverlay {
 	}
 	
 	public void addOverlay(OverlayItem overlayItem) {
-		area.addPoint(overlayItem.getPoint());
 		mOverlayItems.add(overlayItem);
 		populate();
 	}

@@ -75,6 +75,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener{
 					point = mapView.getProjection().fromPixels((int)event.getX(), (int)event.getY());
 					addOverlay(point);
 				}
+				break;
 			}
 		}
 		return false;

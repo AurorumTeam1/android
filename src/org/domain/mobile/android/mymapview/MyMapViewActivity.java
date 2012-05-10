@@ -71,9 +71,10 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener{
 
 	private void addOverlay(GeoPoint p) {
 		Drawable defaultMarker = this.getResources().getDrawable(R.drawable.marker_red_dot);
-		HelloItemizedOverlay itemizedOverlay = new HelloItemizedOverlay(defaultMarker, this);
+		HelloItemizedOverlay itemizedOverlay = new HelloItemizedOverlay(defaultMarker);
 		OverlayItem overlayItem = new OverlayItem(p, null, null);
 		itemizedOverlay.addOverlay(overlayItem);
+		mapView.getOverlays().add(0, new AreaOverlay().addPoint(p));
 		mapView.getOverlays().add(itemizedOverlay);
 	}
 	
@@ -81,5 +82,4 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener{
 		mapView.getOverlays().clear();
 		mapView.invalidate();
 	}
-	
 }

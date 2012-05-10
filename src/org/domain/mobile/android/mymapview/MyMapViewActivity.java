@@ -16,6 +16,8 @@ import android.view.View.OnTouchListener;
 public class MyMapViewActivity extends MapActivity implements OnTouchListener{
 	
 	private MapView mapView;
+	private boolean isPinch = false;
+	private boolean isDrag = false;
 	
     /** Called when the activity is first created. */
     @Override
@@ -25,7 +27,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mapView = (MapView) findViewById(R.id.mapview);
-//        mapView.setBuiltInZoomControls(true);
         mapView.setOnTouchListener(this);
         View doneActionView = findViewById(R.id.action_done);
         doneActionView.setOnClickListener(customActionBarListener);
@@ -59,11 +60,21 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener{
 		if(mapView.getOverlays().size()==0) {
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
-				if(event.getPointerCount() == 1) {
+				isPinch = false;
+				isDrag = false;
+				break;
+			case MotionEvent.ACTION_MOVE:
+				if(event.getPointerCount() > 1) {
+					isPinch = true;
+				} else {
+					isDrag = true;
+				}
+				break;
+			case MotionEvent.ACTION_UP:
+				if(!isPinch && !isDrag) {
 					point = mapView.getProjection().fromPixels((int)event.getX(), (int)event.getY());
 					addOverlay(point);
 				}
-				break;
 			}
 		}
 		return false;

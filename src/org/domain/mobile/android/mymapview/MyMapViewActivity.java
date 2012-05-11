@@ -42,7 +42,8 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener{
 		public void onClick(View v) {
 	        switch (v.getId()) {
             case R.id.action_done:
-            	// TODO: Save area 
+            	// TODO: Save area
+            	hideMarkers();
                 break;
             case R.id.action_cancel:
             	// TODO: Cancel area editing
@@ -76,6 +77,13 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener{
 			}
 		}
 		return false;
+	}
+
+	protected void hideMarkers() {
+		if (mapView.getOverlays().size() > 1) { // remove the overlay with markers
+			mapView.getOverlays().remove(1);
+			mapView.invalidate();
+		}
 	}
 
 	private void addOverlay(GeoPoint p) {

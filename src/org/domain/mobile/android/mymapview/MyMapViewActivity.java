@@ -6,6 +6,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
 import android.graphics.drawable.Drawable;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,6 +31,8 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener{
         View cancelActionView = findViewById(R.id.action_cancel);
         cancelActionView.setOnClickListener(customActionBarListener);
         
+		findViewById(R.id.action_cancel).setEnabled(false);
+		findViewById(R.id.action_done).setEnabled(false);
     }
 
 	@Override
@@ -43,10 +46,14 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener{
 	        switch (v.getId()) {
             case R.id.action_done:
             	// TODO: Save area
+        		findViewById(R.id.action_cancel).setEnabled(true);
+        		findViewById(R.id.action_done).setEnabled(false);
             	hideMarkers();
                 break;
             case R.id.action_cancel:
             	// TODO: Cancel area editing
+        		findViewById(R.id.action_cancel).setEnabled(false);
+        		findViewById(R.id.action_done).setEnabled(false);
             	clearOverlays();
                 break;
 	        }
@@ -93,6 +100,8 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener{
 		itemizedOverlay.addOverlay(overlayItem);
 		mapView.getOverlays().add(0, new AreaOverlay().addPoint(p));
 		mapView.getOverlays().add(itemizedOverlay);
+		findViewById(R.id.action_done).setEnabled(true);
+		findViewById(R.id.action_cancel).setEnabled(true);
 	}
 	
 	protected void doneOverlays() {

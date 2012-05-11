@@ -5,7 +5,6 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
-import android.app.ActionBar;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -22,8 +21,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener{
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        ActionBar actionBar = getActionBar();
-        actionBar.hide(); // Hide the actionbar in the area editing mode! (Should be visible in main app when it is implemented.)
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mapView = (MapView) findViewById(R.id.mapview);
@@ -90,6 +87,11 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener{
 		mapView.getOverlays().add(itemizedOverlay);
 	}
 	
+	protected void doneOverlays() {
+		mapView.getOverlays().clear();
+		mapView.invalidate();
+	}
+
 	protected void clearOverlays() {
 		mapView.getOverlays().clear();
 		mapView.invalidate();

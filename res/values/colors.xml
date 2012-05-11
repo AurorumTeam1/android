@@ -21,8 +21,6 @@
 
     <color name="pressed">#330066ff</color>
 
-    <color name="selection">@android:color/holo_blue_light</color>
-
     <color name="today_highlight_color">#0033b5e5</color>
 
     <!-- The app wide background color -->
@@ -118,7 +116,7 @@
     <!-- Color of the separator between items in the agenda list -->
     <color name="agenda_list_separator_color">#FFBBBBBB</color>
     <!-- Text color of a selected items in the agenda list - trumps all other text colors -->
-    <color name="agenda_selected_background_color">@android:color/holo_blue_dark</color>
+    <color name="agenda_selected_background_color">#FF999999</color>
     <!-- Background color of a selected items in the agenda list -->
     <color name="agenda_selected_text_color">#FFFFFFFF</color>
     <!-- Text color of the "new event" hint in day and week views -->

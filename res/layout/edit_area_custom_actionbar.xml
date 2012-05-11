@@ -18,44 +18,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:background="@color/background_color" >
 
     <!-- id must match corresponding menu item id -->
-
     <LinearLayout
         android:id="@+id/action_cancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        style="@style/EditEventCustomActionButton">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_menu_cancel_holo_light" />
-
+            android:src="@drawable/ic_menu_cancel_holo_light"
+            style="@style/EditEventCustomActionButtonImage" />
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/discard_label" />
+            android:text="@string/discard_label"
+            style="@style/EditEventCustomActionButtonText" />
 
     </LinearLayout>
 
     <!-- id must match corresponding menu item id -->
-
     <LinearLayout
         android:id="@+id/action_done"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        style="@style/EditEventCustomActionButton">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_menu_done_holo_light" />
-
+            android:src="@drawable/ic_menu_done_holo_light"
+            style="@style/EditEventCustomActionButtonImage" />
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save_label" />
+            android:text="@string/save_label"
+            style="@style/EditEventCustomActionButtonText" />
 
     </LinearLayout>
 
+    
 </LinearLayout>

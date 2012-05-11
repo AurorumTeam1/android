@@ -10,6 +10,7 @@ import android.opengl.Visibility;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.MotionEvent.PointerCoords;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 
@@ -71,8 +72,10 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener{
 			case MotionEvent.ACTION_MOVE:
 				if(event.getPointerCount() > 1) {
 					isPinch = true;
-				} else {
-					isDrag = true;
+				} else if(!isDrag && event.getHistorySize() > 0) {
+					if(Math.abs(event.getHistoricalX(0) - event.getX()) > 0.5f || Math.abs(event.getHistoricalY(0) - event.getY()) > 0.5f){
+						isDrag = true;
+					}
 				}
 				break;
 			case MotionEvent.ACTION_UP:

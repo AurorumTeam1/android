@@ -23,8 +23,6 @@
             </intent-filter>
         </activity>
         
-		<provider android:name=".AreaProvider" android:authorities="org.domain.mobile.android.mymapview.AreaProvider" />         
-
 	</application>
 
 </manifest>

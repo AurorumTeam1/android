@@ -10,18 +10,16 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
-public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> implements Serializable {
+public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	
 	private ArrayList<OverlayItem> mOverlayItems = new ArrayList<OverlayItem>();
 	private boolean isPinch;
-	private Area area = new Area();
 
 	public HelloItemizedOverlay(Drawable defaultMarker) {
 		super(boundCenterBottom(defaultMarker));
 	}
 	
 	public void addOverlay(OverlayItem overlayItem) {
-		area.addPoint(overlayItem.getPoint());
 		mOverlayItems.add(overlayItem);
 		populate();
 	}

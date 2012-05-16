@@ -2,11 +2,6 @@ package org.domain.mobile.android.mymapview;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 
@@ -15,22 +10,18 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
-public class HelloItemizedOverlay extends ItemizedOverlay implements Serializable {
+public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> implements Serializable {
 	
 	private ArrayList<OverlayItem> mOverlayItems = new ArrayList<OverlayItem>();
-	private Context mContext;
 	private boolean isPinch;
+	private Area area = new Area();
 
 	public HelloItemizedOverlay(Drawable defaultMarker) {
 		super(boundCenterBottom(defaultMarker));
 	}
 	
-	public HelloItemizedOverlay(Drawable defaultMarker, Context context) {
-		this(defaultMarker);
-		mContext = context;
-	}
-	
 	public void addOverlay(OverlayItem overlayItem) {
+		area.addPoint(overlayItem.getPoint());
 		mOverlayItems.add(overlayItem);
 		populate();
 	}
@@ -47,11 +38,6 @@ public class HelloItemizedOverlay extends ItemizedOverlay implements Serializabl
 	
 	@Override
 	protected boolean onTap(int index) {
-		// Removed functionality until we have designed for it.
-//		OverlayItem item = mOverlayItems.get(index);
-//		AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-//		dialog.setTitle(item.getPoint().toString());
-//		dialog.show();
 		return true; // Return true to avoid adding points on top of existing points
 	}
 	
@@ -66,6 +52,7 @@ public class HelloItemizedOverlay extends ItemizedOverlay implements Serializabl
         }
 		// Tap is outside overlay, add new point
         OverlayItem overlayItem = new OverlayItem(p, "", "");
+        ((AreaOverlay)mapView.getOverlays().get(0)).addPoint(p);
         this.addOverlay(overlayItem);
         populate();
         return true;
@@ -82,27 +69,5 @@ public class HelloItemizedOverlay extends ItemizedOverlay implements Serializabl
 		}
 		
 		return super.onTouchEvent(event, mapView);
-	}
-
-	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-		super.draw(canvas, mapView, shadow);
-		Paint paint = new Paint();
-		paint.setStrokeWidth(2);
-		paint.setStyle(Paint.Style.STROKE);
-		paint.setAntiAlias(true);
-		Point screenCoords1 = new Point();
-		Point screenCoords2 = new Point();
-		int i;
-		for (i = 1; i < mOverlayItems.size(); i++) {
-			mapView.getProjection().toPixels(mOverlayItems.get(i-1).getPoint(), screenCoords1);			
-			mapView.getProjection().toPixels(mOverlayItems.get(i).getPoint(), screenCoords2);
-			canvas.drawLine(screenCoords1.x, screenCoords1.y, screenCoords2.x, screenCoords2.y, paint);
-		}
-		if(--i > 1) {
-			mapView.getProjection().toPixels(mOverlayItems.get(i).getPoint(), screenCoords1);			
-			mapView.getProjection().toPixels(mOverlayItems.get(0).getPoint(), screenCoords2);
-			canvas.drawLine(screenCoords1.x, screenCoords1.y, screenCoords2.x, screenCoords2.y, paint);
-		}
-		populate();
 	}
 }

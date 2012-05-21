@@ -1,6 +1,5 @@
 package org.domain.mobile.android.mymapview;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,7 +10,7 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
-public class AreaOverlay extends Overlay implements Serializable {
+public class AreaOverlay extends Overlay {
 	
 	private ArrayList<GeoPoint> points;
 

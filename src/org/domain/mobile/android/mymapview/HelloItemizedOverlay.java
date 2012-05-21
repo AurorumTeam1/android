@@ -1,6 +1,5 @@
 package org.domain.mobile.android.mymapview;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;

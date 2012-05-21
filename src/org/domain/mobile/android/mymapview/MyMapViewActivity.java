@@ -73,6 +73,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			}
 		}
 	};
+	private boolean isEditable; // Temp boolean to enable working with just one area, remove when implementing multiple areas.
 
 	public boolean onTouch(View v, MotionEvent event) {
 		if (mapView.getOverlays().size() <= 1) {
@@ -91,7 +92,9 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			case MotionEvent.ACTION_UP:
 				if (!isPinch && !isDrag) {
 					GeoPoint point = mapView.getProjection().fromPixels((int) event.getX(), (int) event.getY());
-					addOverlay(point);
+					if (isEditable) {
+						addOverlay(point);
+					}
 				}
 				break;
 			}
@@ -120,6 +123,9 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		}
 		
 		mapView.getOverlays().add(0, loadadArea);
+		isEditable = false;
+		findViewById(R.id.action_done).setEnabled(false);
+		findViewById(R.id.action_cancel).setEnabled(true);
 		
 		centerOnOverlay(loadadArea.getPoints());
 	}
@@ -147,6 +153,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	protected void clearOverlays() {
 		mapView.getOverlays().clear();
 		mapView.invalidate();
+		isEditable = true;
 	}
 	
 	public void centerOnOverlay(ArrayList<GeoPoint> points) {

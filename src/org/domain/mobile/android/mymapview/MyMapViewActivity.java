@@ -1,8 +1,13 @@
 package org.domain.mobile.android.mymapview;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
 import android.app.ActionBar;
@@ -37,6 +42,10 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 
 		findViewById(R.id.action_cancel).setEnabled(false);
 		findViewById(R.id.action_done).setEnabled(false);
+		
+		loadArea();
+	
+		
 	}
 
 	@Override
@@ -66,7 +75,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	};
 
 	public boolean onTouch(View v, MotionEvent event) {
-		if (mapView.getOverlays().size() == 0) {
+		if (mapView.getOverlays().size() <= 1) {
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				isPinch = false;
@@ -98,6 +107,23 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		FileWriter fileWriter = new FileWriter(getExternalFilesDir(null).getAbsolutePath(), "testarea1", (AreaOverlay)mapView.getOverlays().get(0));
 		fileWriter.write();
 	}
+	
+	private void loadArea() {
+		if (mapView.getOverlays().size() > 0) { // Do not load new if one already exists.
+			return;
+		}
+		
+		FileWriter fileWriter = new FileWriter(getExternalFilesDir(null).getAbsolutePath(), "testarea1");
+		AreaOverlay loadadArea = fileWriter.read();
+		if (loadadArea == null || loadadArea.getPoints().size() == 0) {
+			return;
+		}
+		
+		mapView.getOverlays().add(0, loadadArea);
+		
+		centerOnOverlay(loadadArea.getPoints());
+	}
+
 
 	protected void hideMarkers() {
 		if (mapView.getOverlays().size() > 1) { // remove the overlay with
@@ -122,4 +148,22 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		mapView.getOverlays().clear();
 		mapView.invalidate();
 	}
+	
+	public void centerOnOverlay(ArrayList<GeoPoint> points) {
+	    int minLat = Integer.MAX_VALUE;
+	    int minLong = Integer.MAX_VALUE;
+	    int maxLat = Integer.MIN_VALUE;
+	    int maxLong = Integer.MIN_VALUE;
+
+	    for( GeoPoint l : points ) {
+	        minLat  = Math.min( l.getLatitudeE6(), minLat );
+	        minLong = Math.min( l.getLongitudeE6(), minLong);
+	        maxLat  = Math.max( l.getLatitudeE6(), maxLat );
+	        maxLong = Math.max( l.getLongitudeE6(), maxLong );
+	    }
+
+	    mapView.getController().zoomToSpan(Math.abs( minLat - maxLat ), Math.abs( minLong - maxLong ));
+	    mapView.getController().animateTo(new GeoPoint((maxLat + minLat) / 2, (maxLong + minLong) / 2));
+	}
+
 }

@@ -32,13 +32,13 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		setContentView(R.layout.main);
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setOnTouchListener(this);
-		View doneActionView = findViewById(R.id.action_done);
+		View doneActionView = findViewById(R.id.ok_button);
 		doneActionView.setOnClickListener(customActionBarListener);
-		View cancelActionView = findViewById(R.id.action_cancel);
+		View cancelActionView = findViewById(R.id.cancel_button);
 		cancelActionView.setOnClickListener(customActionBarListener);
 
-		findViewById(R.id.action_cancel).setEnabled(false);
-		findViewById(R.id.action_done).setEnabled(false);
+		findViewById(R.id.cancel_button).setEnabled(false);
+		findViewById(R.id.ok_button).setEnabled(false);
 		
 		loadArea();
 	
@@ -54,17 +54,17 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
-			case R.id.action_done:
+			case R.id.ok_button:
 				// TODO: Save area
-				findViewById(R.id.action_cancel).setEnabled(true);
-				findViewById(R.id.action_done).setEnabled(false);
+				findViewById(R.id.cancel_button).setEnabled(true);
+				findViewById(R.id.ok_button).setEnabled(false);
 				hideMarkers();
 				saveArea();
 				break;
-			case R.id.action_cancel:
+			case R.id.cancel_button:
 				// TODO: Cancel area editing
-				findViewById(R.id.action_cancel).setEnabled(false);
-				findViewById(R.id.action_done).setEnabled(false);
+				findViewById(R.id.cancel_button).setEnabled(false);
+				findViewById(R.id.ok_button).setEnabled(false);
 				clearOverlays();
 				break;
 			}
@@ -121,8 +121,8 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		
 		mapView.getOverlays().add(0, loadadArea);
 		isEditable = false;
-		findViewById(R.id.action_done).setEnabled(false);
-		findViewById(R.id.action_cancel).setEnabled(true);
+		findViewById(R.id.ok_button).setEnabled(false);
+		findViewById(R.id.cancel_button).setEnabled(true);
 		
 		centerOnOverlay(loadadArea.getPoints());
 	}
@@ -142,8 +142,8 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		itemizedOverlay.addOverlay(overlayItem);
 		mapView.getOverlays().add(0, new AreaOverlay().addPoint(p));
 		mapView.getOverlays().add(itemizedOverlay);
-		findViewById(R.id.action_done).setEnabled(true);
-		findViewById(R.id.action_cancel).setEnabled(true);
+		findViewById(R.id.ok_button).setEnabled(true);
+		findViewById(R.id.cancel_button).setEnabled(true);
 	}
 
 	protected void clearOverlays() {

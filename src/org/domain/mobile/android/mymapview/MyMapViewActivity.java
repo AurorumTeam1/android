@@ -1,22 +1,19 @@
 package org.domain.mobile.android.mymapview;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapController;
-import com.google.android.maps.MapView;
-import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 
 import android.app.ActionBar;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.ImageView;
+
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapView;
+import com.google.android.maps.OverlayItem;
 
 public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 
@@ -140,8 +137,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	}
 
 	private void addOverlay(GeoPoint p) {
-		Drawable defaultMarker = this.getResources().getDrawable(R.drawable.marker_red_dot);
-		HelloItemizedOverlay itemizedOverlay = new HelloItemizedOverlay(defaultMarker);
+		HelloItemizedOverlay itemizedOverlay = new HelloItemizedOverlay(this.getResources().getDrawable(R.drawable.marker_red_dot), (ImageView) findViewById(R.id.drag));
 		OverlayItem overlayItem = new OverlayItem(p, null, null);
 		itemizedOverlay.addOverlay(overlayItem);
 		mapView.getOverlays().add(0, new AreaOverlay().addPoint(p));

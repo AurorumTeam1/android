@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/edit_event"
+    style="@style/EditEvent_Layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    style="@style/EditEvent_Layout">
-    
-    <!-- 
+    android:orientation="vertical" >
+
+    <!--
     <TextView
         android:id="@+id/loading_message"
         android:layout_width="match_parent"
@@ -18,21 +16,33 @@
         android:gravity="center"
         android:text="@string/loading"
         style="?android:attr/textAppearanceLarge"
-        android:background="#FFFFFFFF"/>
+        android:background="#FFFFFFFF"/>
     -->
 
-	<include
-		layout="@layout/edit_area_custom_actionbar"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content" />
-	<com.google.android.maps.MapView
-	    xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:id="@+id/mapview"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:clickable="true"
-	    android:apiKey="@string/mapViewApiKey"
-	/>
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/edit_area_custom_actionbar" />
 
-	
-</LinearLayout>	
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <com.google.android.maps.MapView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/mapview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:apiKey="@string/mapViewApiKey"
+            android:clickable="true" />
+
+        <ImageView
+            android:id="@+id/drag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/marker_red_dot"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -16,21 +16,34 @@
         android:gravity="center"
         android:text="@string/loading"
         style="?android:attr/textAppearanceLarge"
-        android:background="#FFFFFFFF"/>
+        android:background="#FFFFFFFF"/>
     -->
 
-    <include
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/edit_area_custom_actionbar" />
+        android:layout_height="wrap_content" >
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/edit_area_custom_actionbar" />
+
+        <Button
+            android:id="@+id/button_remove"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:drawableStart="@drawable/ic_menu_remove_field_holo_light"
+            android:text="@string/remove_label"
+            android:visibility="invisible" />
+    </RelativeLayout>
 
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
         <com.google.android.maps.MapView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/mapview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

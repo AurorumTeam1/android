@@ -2,10 +2,14 @@ package org.domain.mobile.android.mymapview;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -19,6 +23,8 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	private ArrayList<OverlayItem> mOverlayItems = new ArrayList<OverlayItem>();
 	private boolean isPinch;
 	private ImageView dragImage;
+	private View removeButton;
+	private View customActionbar; 
 	private Drawable defaultMarker;
 	private int xDragImageOffset;
 	private int yDragImageOffset;
@@ -26,14 +32,18 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	private int yDragTouchOffset;
 	private OverlayItem inDrag;
 	private int oldIndex;
+	private Context mContext;
 
 	public HelloItemizedOverlay(Drawable defaultMarker) {
 		super(boundCenterBottom(defaultMarker));
 	}
 	
-	public HelloItemizedOverlay(Drawable defaultMarker, ImageView dragImage) {
+	public HelloItemizedOverlay(Context context, Drawable defaultMarker, ImageView dragImage, View customActionbar, View removeButton) {
 		this(defaultMarker);
+		this.mContext = context;
 		this.dragImage = dragImage;
+		this.customActionbar = customActionbar;
+		this.removeButton = removeButton;
 		this.defaultMarker = defaultMarker;
 		xDragImageOffset = dragImage.getDrawable().getIntrinsicWidth() / 2;
 		yDragImageOffset = dragImage.getDrawable().getIntrinsicHeight();
@@ -111,6 +121,13 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 
 					setDragImagePosition(p.x, p.y);
 					dragImage.setVisibility(View.VISIBLE);
+					
+					removeButton.setVisibility(View.VISIBLE);
+					Animation fadeInAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
+					removeButton.startAnimation(fadeInAnimation );
+					customActionbar.setVisibility(View.INVISIBLE);
+					Animation fadeOutAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fade_out);
+					customActionbar.startAnimation(fadeOutAnimation );
 
 					xDragTouchOffset = x - p.x;
 					yDragTouchOffset = y - p.y;
@@ -123,6 +140,12 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 			result = true;
 		} else if (action == MotionEvent.ACTION_UP && inDrag != null) {
 			dragImage.setVisibility(View.GONE);
+			removeButton.setVisibility(View.INVISIBLE);
+			Animation fadeOutAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fade_out);
+			removeButton.startAnimation(fadeOutAnimation );
+			customActionbar.setVisibility(View.VISIBLE);
+			Animation fadeInAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
+			customActionbar.startAnimation(fadeInAnimation );
 
 			GeoPoint pt = mapView.getProjection().fromPixels(x - xDragTouchOffset, y - yDragTouchOffset);
 			OverlayItem toDrop = new OverlayItem(pt, inDrag.getTitle(), inDrag.getSnippet());

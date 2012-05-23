@@ -3,11 +3,16 @@ package org.domain.mobile.android.mymapview;
 import java.util.ArrayList;
 
 import android.app.ActionBar;
+import android.content.ClipData.Item;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.android.maps.GeoPoint;
@@ -20,6 +25,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	private MapView mapView;
 	private boolean isPinch = false;
 	private boolean isDrag = false;
+	private Button removeButton;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -39,16 +45,49 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 
 		findViewById(R.id.cancel_button).setEnabled(false);
 		findViewById(R.id.ok_button).setEnabled(false);
-		
+		removeButton = (Button) findViewById(R.id.button_remove);
+		removeButton.setOnDragListener(removeDragListener);
+
 		loadArea();
-	
-		
+
 	}
 
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
+
+	public OnDragListener removeDragListener = new OnDragListener() {
+		@Override
+		public boolean onDrag(View v, DragEvent event) {
+			boolean insideOfMe = false;
+			CharSequence dragData;
+			switch (event.getAction()) {
+			case DragEvent.ACTION_DRAG_STARTED:
+				break;
+			case DragEvent.ACTION_DRAG_ENTERED:
+				insideOfMe = true;
+				removeButton.setTextColor(Color.RED);				
+				break;
+			case DragEvent.ACTION_DRAG_LOCATION:
+				break;
+			case DragEvent.ACTION_DRAG_ENDED:
+                final boolean dropped = event.getResult();
+				removeButton.setTextColor(Color.BLACK);
+				break;
+			case DragEvent.ACTION_DRAG_EXITED:
+				insideOfMe = false;
+				break;
+			case DragEvent.ACTION_DROP:
+		        if (insideOfMe) {
+		            Item item = event.getClipData().getItemAt(0);
+		            // Do whatever you want to do with the item
+		        }
+				break;
+			}
+			return insideOfMe;
+		}
+	};
 
 	private OnClickListener customActionBarListener = new OnClickListener() {
 		@Override
@@ -70,7 +109,9 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			}
 		}
 	};
-	private boolean isEditable; // Temp boolean to enable working with just one area, remove when implementing multiple areas.
+	private boolean isEditable; // Temp boolean to enable working with just one
+								// area, remove when implementing multiple
+								// areas.
 
 	public boolean onTouch(View v, MotionEvent event) {
 		if (mapView.getOverlays().size() <= 1) {
@@ -104,29 +145,30 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			return;
 		}
 
-		FileWriter fileWriter = new FileWriter(getExternalFilesDir(null).getAbsolutePath(), "testarea1", (AreaOverlay)mapView.getOverlays().get(0));
+		FileWriter fileWriter = new FileWriter(getExternalFilesDir(null).getAbsolutePath(), "testarea1",
+				(AreaOverlay) mapView.getOverlays().get(0));
 		fileWriter.write();
 	}
-	
+
 	private void loadArea() {
-		if (mapView.getOverlays().size() > 0) { // Do not load new if one already exists.
+		if (mapView.getOverlays().size() > 0) { // Do not load new if one
+												// already exists.
 			return;
 		}
-		
+
 		FileWriter fileWriter = new FileWriter(getExternalFilesDir(null).getAbsolutePath(), "testarea1");
 		AreaOverlay loadadArea = fileWriter.read();
 		if (loadadArea == null || loadadArea.getPoints().size() == 0) {
 			return;
 		}
-		
+
 		mapView.getOverlays().add(0, loadadArea);
 		isEditable = false;
 		findViewById(R.id.ok_button).setEnabled(false);
 		findViewById(R.id.cancel_button).setEnabled(true);
-		
+
 		centerOnOverlay(loadadArea.getPoints());
 	}
-
 
 	protected void hideMarkers() {
 		if (mapView.getOverlays().size() > 1) { // remove the overlay with
@@ -137,9 +179,8 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	}
 
 	private void addOverlay(GeoPoint p) {
-		HelloItemizedOverlay itemizedOverlay = new HelloItemizedOverlay(this, this.getResources().getDrawable(R.drawable.marker_red_dot), 
-				(ImageView) findViewById(R.id.drag), 
-				findViewById(R.id.custom_actionbar), 
+		HelloItemizedOverlay itemizedOverlay = new HelloItemizedOverlay(this, this.getResources().getDrawable(
+				R.drawable.marker_red_dot), (ImageView) findViewById(R.id.drag), findViewById(R.id.custom_actionbar),
 				findViewById(R.id.button_remove));
 		OverlayItem overlayItem = new OverlayItem(p, null, null);
 		itemizedOverlay.addOverlay(overlayItem);
@@ -154,22 +195,22 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		mapView.invalidate();
 		isEditable = true;
 	}
-	
+
 	public void centerOnOverlay(ArrayList<GeoPoint> points) {
-	    int minLat = Integer.MAX_VALUE;
-	    int minLong = Integer.MAX_VALUE;
-	    int maxLat = Integer.MIN_VALUE;
-	    int maxLong = Integer.MIN_VALUE;
+		int minLat = Integer.MAX_VALUE;
+		int minLong = Integer.MAX_VALUE;
+		int maxLat = Integer.MIN_VALUE;
+		int maxLong = Integer.MIN_VALUE;
 
-	    for( GeoPoint l : points ) {
-	        minLat  = Math.min( l.getLatitudeE6(), minLat );
-	        minLong = Math.min( l.getLongitudeE6(), minLong);
-	        maxLat  = Math.max( l.getLatitudeE6(), maxLat );
-	        maxLong = Math.max( l.getLongitudeE6(), maxLong );
-	    }
+		for (GeoPoint l : points) {
+			minLat = Math.min(l.getLatitudeE6(), minLat);
+			minLong = Math.min(l.getLongitudeE6(), minLong);
+			maxLat = Math.max(l.getLatitudeE6(), maxLat);
+			maxLong = Math.max(l.getLongitudeE6(), maxLong);
+		}
 
-	    mapView.getController().zoomToSpan(Math.abs( minLat - maxLat ), Math.abs( minLong - maxLong ));
-	    mapView.getController().animateTo(new GeoPoint((maxLat + minLat) / 2, (maxLong + minLong) / 2));
+		mapView.getController().zoomToSpan(Math.abs(minLat - maxLat), Math.abs(minLong - maxLong));
+		mapView.getController().animateTo(new GeoPoint((maxLat + minLat) / 2, (maxLong + minLong) / 2));
 	}
 
 }

@@ -3,7 +3,6 @@ package org.domain.mobile.android.mymapview;
 import java.util.ArrayList;
 
 import android.app.ActionBar;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -23,9 +21,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	private MapView mapView;
 	private boolean isPinch = false;
 	private boolean isDrag = false;
-	private Button removeButton;
-	private LinearLayout customActionBar;
-	protected Context mContext = this;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -42,12 +37,8 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		doneActionView.setOnClickListener(customActionBarListener);
 		View cancelActionView = findViewById(R.id.cancel_button);
 		cancelActionView.setOnClickListener(customActionBarListener);
-
 		findViewById(R.id.cancel_button).setEnabled(false);
 		findViewById(R.id.ok_button).setEnabled(false);
-		removeButton = (Button) findViewById(R.id.button_remove);
-		findViewById(R.id.ok_button).setEnabled(false);
-		customActionBar = (LinearLayout) findViewById(R.id.custom_actionbar);
 		
 		loadArea();
 	}
@@ -57,20 +48,17 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		return false;
 	}
 
-
 	private OnClickListener customActionBarListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.ok_button:
-				// TODO: Save area
 				findViewById(R.id.cancel_button).setEnabled(true);
 				findViewById(R.id.ok_button).setEnabled(false);
 				hideMarkers();
 				saveArea();
 				break;
 			case R.id.cancel_button:
-				// TODO: Cancel area editing
 				findViewById(R.id.cancel_button).setEnabled(false);
 				findViewById(R.id.ok_button).setEnabled(false);
 				clearOverlays();

@@ -3,6 +3,7 @@ package org.domain.mobile.android.mymapview;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
@@ -20,6 +21,7 @@ import com.google.android.maps.OverlayItem;
 
 public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 
+	private Context mContext;
 	private ArrayList<OverlayItem> mOverlayItems = new ArrayList<OverlayItem>();
 	private boolean isPinch;
 	private ImageView dragImage;
@@ -32,7 +34,7 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	private int yDragTouchOffset;
 	private OverlayItem inDrag;
 	private int oldIndex;
-	private Context mContext;
+	private int[] mCoordBuffer = {0,0};
 
 	public HelloItemizedOverlay(Drawable defaultMarker) {
 		super(boundCenterBottom(defaultMarker));
@@ -76,7 +78,7 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 		if (isPinch) {
 			return false;
 		}
-		if (super.onTap(p, mapView)) {
+		if (this.size() != 0 && super.onTap(p, mapView)) {
 			// Do nothing here if overlay is tapped
 			return true;
 		}
@@ -139,8 +141,24 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 			}
 		} else if (action == MotionEvent.ACTION_MOVE && inDrag != null) {
 			setDragImagePosition(x, y);
-			// TODO: Handle dragging point to "remove-button" here!
+
+			boolean insideRemoveButton = inRegion(event.getRawX(), event.getRawY(), removeButton);
+			//TODO: optimize so handling this only on enter and leave button, not every move event inside button.
+			if (insideRemoveButton) {
+				if (removeButton.getCurrentTextColor() == Color.BLACK) { // Quick and dirty optimization 
+					removeButton.setTextColor(Color.RED);
+					Drawable removeDrawable = mContext.getResources().getDrawable(R.drawable.ic_menu_remove_field_holo_light_red);
+					removeButton.setCompoundDrawablesWithIntrinsicBounds(removeDrawable , null, null, null);
+				}
+			} else {
+				if (removeButton.getCurrentTextColor() == Color.RED) {
+					removeButton.setTextColor(Color.BLACK);
+					Drawable removeDrawable = mContext.getResources().getDrawable(R.drawable.ic_menu_remove_field_holo_light);
+					removeButton.setCompoundDrawablesWithIntrinsicBounds(removeDrawable , null, null, null);
+				}
+			}
 			result = true;
+			
 		} else if (action == MotionEvent.ACTION_UP && inDrag != null) {
 			dragImage.setVisibility(View.GONE);
 
@@ -151,12 +169,15 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 			Animation fadeInAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
 			customActionBar.startAnimation(fadeInAnimation);
 
-			GeoPoint pt = mapView.getProjection().fromPixels(x - xDragTouchOffset, y - yDragTouchOffset);
-			OverlayItem toDrop = new OverlayItem(pt, inDrag.getTitle(), inDrag.getSnippet());
+			boolean insideRemoveButton = inRegion(event.getRawX(), event.getRawY(), removeButton);
+			if (!insideRemoveButton) {
+				GeoPoint pt = mapView.getProjection().fromPixels(x - xDragTouchOffset, y - yDragTouchOffset);
+				OverlayItem toDrop = new OverlayItem(pt, inDrag.getTitle(), inDrag.getSnippet());
 
-			mOverlayItems.add(oldIndex, toDrop);
-			area.getPoints().add(oldIndex, toDrop.getPoint());
-			populate();
+				mOverlayItems.add(oldIndex, toDrop);
+				area.getPoints().add(oldIndex, toDrop.getPoint());
+				populate();
+			}
 
 			inDrag = null;
 			result = true;
@@ -164,7 +185,17 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 
 		return (result || super.onTouchEvent(event, mapView));
 	}
+	
+	
+	private boolean inRegion(float x, float y, View v) {
+		v.getLocationOnScreen(mCoordBuffer );
+        return mCoordBuffer[0] + v.getWidth() > x &&    // right edge
+               mCoordBuffer[1] + v.getHeight() > y &&   // bottom edge
+               mCoordBuffer[0] < x &&                   // left edge
+               mCoordBuffer[1] < y;                     // top edge
+    }
 
+	
 	private void setDragImagePosition(int x, int y) {
 		RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) dragImage.getLayoutParams();
 		lp.setMargins(x - xDragImageOffset - xDragTouchOffset, y - yDragImageOffset - yDragTouchOffset, 0, 0);

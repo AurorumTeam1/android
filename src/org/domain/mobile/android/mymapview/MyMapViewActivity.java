@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.content.ClipData.Item;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.DragEvent;
@@ -12,8 +13,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -26,6 +30,8 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	private boolean isPinch = false;
 	private boolean isDrag = false;
 	private Button removeButton;
+	private LinearLayout customActionBar;
+	protected Context mContext = this;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -47,9 +53,10 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		findViewById(R.id.ok_button).setEnabled(false);
 		removeButton = (Button) findViewById(R.id.button_remove);
 		removeButton.setOnDragListener(removeDragListener);
-
+		findViewById(R.id.ok_button).setEnabled(false);
+		customActionBar = (LinearLayout) findViewById(R.id.custom_actionbar);
+		
 		loadArea();
-
 	}
 
 	@Override
@@ -58,8 +65,12 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	}
 
 	public OnDragListener removeDragListener = new OnDragListener() {
+		private Animation fadeOutAnimation;
+		private Animation fadeInAnimation;
+
 		@Override
 		public boolean onDrag(View v, DragEvent event) {
+			boolean isHandled = true;
 			boolean insideOfMe = false;
 			CharSequence dragData;
 			switch (event.getAction()) {
@@ -67,16 +78,16 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 				break;
 			case DragEvent.ACTION_DRAG_ENTERED:
 				insideOfMe = true;
-				removeButton.setTextColor(Color.RED);				
+				removeButton.setTextColor(Color.RED);
 				break;
 			case DragEvent.ACTION_DRAG_LOCATION:
 				break;
 			case DragEvent.ACTION_DRAG_ENDED:
                 final boolean dropped = event.getResult();
-				removeButton.setTextColor(Color.BLACK);
 				break;
 			case DragEvent.ACTION_DRAG_EXITED:
 				insideOfMe = false;
+				removeButton.setTextColor(Color.BLACK);
 				break;
 			case DragEvent.ACTION_DROP:
 		        if (insideOfMe) {
@@ -85,7 +96,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		        }
 				break;
 			}
-			return insideOfMe;
+			return isHandled;
 		}
 	};
 
@@ -181,7 +192,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	private void addOverlay(GeoPoint p) {
 		HelloItemizedOverlay itemizedOverlay = new HelloItemizedOverlay(this, this.getResources().getDrawable(
 				R.drawable.marker_red_dot), (ImageView) findViewById(R.id.drag), findViewById(R.id.custom_actionbar),
-				findViewById(R.id.button_remove));
+				(Button) findViewById(R.id.button_remove));
 		OverlayItem overlayItem = new OverlayItem(p, null, null);
 		itemizedOverlay.addOverlay(overlayItem);
 		mapView.getOverlays().add(0, new AreaOverlay().addPoint(p));

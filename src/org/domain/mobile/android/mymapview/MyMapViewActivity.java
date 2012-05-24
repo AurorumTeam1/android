@@ -3,18 +3,12 @@ package org.domain.mobile.android.mymapview;
 import java.util.ArrayList;
 
 import android.app.ActionBar;
-import android.content.ClipData.Item;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,7 +46,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		findViewById(R.id.cancel_button).setEnabled(false);
 		findViewById(R.id.ok_button).setEnabled(false);
 		removeButton = (Button) findViewById(R.id.button_remove);
-		removeButton.setOnDragListener(removeDragListener);
 		findViewById(R.id.ok_button).setEnabled(false);
 		customActionBar = (LinearLayout) findViewById(R.id.custom_actionbar);
 		
@@ -64,41 +57,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		return false;
 	}
 
-	public OnDragListener removeDragListener = new OnDragListener() {
-		private Animation fadeOutAnimation;
-		private Animation fadeInAnimation;
-
-		@Override
-		public boolean onDrag(View v, DragEvent event) {
-			boolean isHandled = true;
-			boolean insideOfMe = false;
-			CharSequence dragData;
-			switch (event.getAction()) {
-			case DragEvent.ACTION_DRAG_STARTED:
-				break;
-			case DragEvent.ACTION_DRAG_ENTERED:
-				insideOfMe = true;
-				removeButton.setTextColor(Color.RED);
-				break;
-			case DragEvent.ACTION_DRAG_LOCATION:
-				break;
-			case DragEvent.ACTION_DRAG_ENDED:
-                final boolean dropped = event.getResult();
-				break;
-			case DragEvent.ACTION_DRAG_EXITED:
-				insideOfMe = false;
-				removeButton.setTextColor(Color.BLACK);
-				break;
-			case DragEvent.ACTION_DROP:
-		        if (insideOfMe) {
-		            Item item = event.getClipData().getItemAt(0);
-		            // Do whatever you want to do with the item
-		        }
-				break;
-			}
-			return isHandled;
-		}
-	};
 
 	private OnClickListener customActionBarListener = new OnClickListener() {
 		@Override

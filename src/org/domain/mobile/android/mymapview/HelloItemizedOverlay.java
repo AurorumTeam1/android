@@ -2,15 +2,11 @@ package org.domain.mobile.android.mymapview;
 
 import java.util.ArrayList;
 
-import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.DragShadowBuilder;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -128,20 +124,12 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 					setDragImagePosition(p.x, p.y);
 					dragImage.setVisibility(View.VISIBLE);
 
-					// Start drag operation
-					dragImage.setTag(oldIndex);
-					ClipData.Item clipItem = new ClipData.Item((CharSequence) dragImage.getTag().toString());
-					ClipDescription NOTE_STREAM_TYPES = new ClipDescription((CharSequence) dragImage.getTag().toString(), new String[] { ClipDescription.MIMETYPE_TEXT_PLAIN });
-					ClipData data = new ClipData(NOTE_STREAM_TYPES, clipItem);
-
 					removeButton.setVisibility(View.VISIBLE);
 					Animation fadeInAnimation = AnimationUtils.loadAnimation(mContext , R.anim.fade_in);
 					removeButton.startAnimation(fadeInAnimation);
 					customActionBar.setVisibility(View.INVISIBLE);
 					Animation fadeOutAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fade_out);
 					customActionBar.startAnimation(fadeOutAnimation);
-					removeButton.startDrag(data, new DragShadowBuilder(dragImage), null, 0);
-					
 
 					xDragTouchOffset = x - p.x;
 					yDragTouchOffset = y - p.y;
@@ -151,6 +139,7 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 			}
 		} else if (action == MotionEvent.ACTION_MOVE && inDrag != null) {
 			setDragImagePosition(x, y);
+			// TODO: Handle dragging point to "remove-button" here!
 			result = true;
 		} else if (action == MotionEvent.ACTION_UP && inDrag != null) {
 			dragImage.setVisibility(View.GONE);

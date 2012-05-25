@@ -16,12 +16,26 @@
         android:gravity="center"
         android:text="@string/loading"
         style="?android:attr/textAppearanceLarge"
-        android:background="#FFFFFFFF"/>
+        android:background="#FFFFFFFF"/>
     -->
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
+
+        <com.google.android.maps.MapView
+            android:id="@+id/mapview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:apiKey="@string/mapViewApiKey"
+            android:clickable="true" />
+
+        <ImageView
+            android:id="@+id/drag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/marker_red_dot"
+            android:visibility="gone" />
 
         <include
             android:layout_width="match_parent"
@@ -37,25 +51,6 @@
             android:drawableStart="@drawable/ic_menu_remove_field_holo_light"
             android:text="@string/remove_label"
             android:visibility="invisible" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <com.google.android.maps.MapView
-            android:id="@+id/mapview"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:apiKey="@string/mapViewApiKey"
-            android:clickable="true" />
-
-        <ImageView
-            android:id="@+id/drag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/marker_red_dot"
-            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -157,4 +157,8 @@
     <color name="appwidget_when">#ffffffff</color>
     <color name="appwidget_where">#ffffffff</color>
     <color name="appwidget_no_events">#ffffffff</color>
+
+    <color name="text">#ffffffff</color>
+    <color name="bar_background">#80000000</color>
+    
 </resources>

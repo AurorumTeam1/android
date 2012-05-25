@@ -23,7 +23,8 @@
     android:dividerPadding="12dip"
     android:orientation="horizontal"
     android:showDividers="middle"
-    android:visibility="visible" >
+    android:visibility="visible"
+    android:background="@color/bar_background" >
 
     <Button
         android:id="@+id/cancel_button"
@@ -34,7 +35,9 @@
         android:drawablePadding="0dp"
         android:maxLines="2"
         android:text="@string/discard_label"
-        android:textAppearance="?android:attr/actionMenuTextAppearance" />
+        android:textAppearance="?android:attr/actionMenuTextAppearance"
+        android:textColor="@color/text"
+         />
 
     <Button
         android:id="@+id/ok_button"
@@ -45,6 +48,9 @@
         android:filterTouchesWhenObscured="true"
         android:maxLines="2"
         android:text="@string/save_label"
-        android:textAppearance="?android:attr/actionMenuTextAppearance" />
+        android:textAppearance="?android:attr/actionMenuTextAppearance"
+        android:textColor="@color/text"
+        />
+
 
 </LinearLayout>

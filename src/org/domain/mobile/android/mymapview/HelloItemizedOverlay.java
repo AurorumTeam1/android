@@ -38,6 +38,7 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 
 	public HelloItemizedOverlay(Drawable defaultMarker) {
 		super(boundCenterBottom(defaultMarker));
+		this.defaultMarker = defaultMarker;
 	}
 
 	public HelloItemizedOverlay(Context context, Drawable defaultMarker, ImageView dragImage, View customActionBar,

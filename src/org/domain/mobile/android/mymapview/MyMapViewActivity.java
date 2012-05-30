@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +24,9 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	private MapView mapView;
 	private boolean isPinch = false;
 	private boolean isDrag = false;
+	
+	private double mLongitude = 0;
+	private double mLatitude = 0;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -113,18 +119,23 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			return;
 		}
 
-		FileWriter fileWriter = new FileWriter(getExternalFilesDir(null).getAbsolutePath(), "testarea1");
-		AreaOverlay loadadArea = fileWriter.read();
-		if (loadadArea == null || loadadArea.getPoints().size() == 0) {
-			return;
+		try {
+			FileWriter fileWriter = new FileWriter(getExternalFilesDir(null).getAbsolutePath(), "testarea1");
+			AreaOverlay loadadArea = fileWriter.read();
+			if (loadadArea == null || loadadArea.getPoints().size() == 0) {
+				return;
+			}
+
+			mapView.getOverlays().add(0, loadadArea);
+			isEditable = false;
+			findViewById(R.id.ok_button).setEnabled(false);
+			findViewById(R.id.cancel_button).setEnabled(true);
+
+			centerOnOverlay(loadadArea.getPoints());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		mapView.getOverlays().add(0, loadadArea);
-		isEditable = false;
-		findViewById(R.id.ok_button).setEnabled(false);
-		findViewById(R.id.cancel_button).setEnabled(true);
-
-		centerOnOverlay(loadadArea.getPoints());
 	}
 
 	protected void hideMarkers() {
@@ -170,4 +181,31 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		mapView.getController().animateTo(new GeoPoint((maxLat + minLat) / 2, (maxLong + minLong) / 2));
 	}
 
+	/**
+	 * Creates menu items from a resource file.
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main, menu);
+	    return true;
+	}
+	
+	/**
+	 * Handles the creation of a new marker on the map.
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		HelloItemizedOverlay itemizedOverlay = new HelloItemizedOverlay(this.getResources().getDrawable(
+				R.drawable.marker_start));
+	    switch (item.getItemId()) {
+	        case R.id.add_new_marker:
+	    	  GeoPoint point = new GeoPoint((int)(mLongitude * 1E6), (int)(mLatitude * 1E6));
+	    	  OverlayItem overlayitem = new OverlayItem(point, "Me", "Hello ");
+	          itemizedOverlay.addOverlay(overlayitem);
+	          mapView.getOverlays().add(itemizedOverlay);
+	          return true;
+	    }
+	    return super.onOptionsItemSelected(item);
+	}
 }

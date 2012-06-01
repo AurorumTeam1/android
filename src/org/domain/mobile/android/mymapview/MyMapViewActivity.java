@@ -3,13 +3,7 @@ package org.domain.mobile.android.mymapview;
 import java.util.ArrayList;
 
 import android.app.ActionBar;
-import android.location.GpsStatus.Listener;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,17 +19,12 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
-public class MyMapViewActivity extends MapActivity implements OnTouchListener, LocationListener {
+public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 
-	private static final int UPDATE_LOCATION = 0;
 	private MapView mapView;
 	private boolean isPinch = false;
 	private boolean isDrag = false;
-
-	private double mLongitude = 0;
-	private double mLatitude = 0;
-
-	private LocationManager mLocationManager;
+	private PositionOverlay mMyLocationOverlay;
 	Thread mThread;
 
 	/** Called when the activity is first created. */
@@ -216,29 +205,16 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener, L
 	}
 
 
-
-	/**
-	 * Invoked by the location service when phone's location changes.
-	 */
-	public void onLocationChanged(Location newLocation) {
-		GeoPoint point = new GeoPoint((int)(newLocation.getLatitude()*1E6), (int)(newLocation.getLongitude()*1E6));
-		HelloItemizedOverlay itemizedOverlay = new HelloItemizedOverlay(this.getResources().getDrawable(R.drawable.marker_start));
-		OverlayItem overlayitem = new OverlayItem(point, "Me", "Hello ");
-		itemizedOverlay.addOverlay(overlayitem);
-		mapView.getOverlays().add(itemizedOverlay);
-		mLocationManager.removeUpdates(this);
-	}
-
-	public void onProviderEnabled(String provider) {
-	}
-	public void onProviderDisabled(String provider) {
-	}
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-	}
-
-
 	private void getLocationUpdates() {
-		mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, this); // Every 10000 msecs			
+		if(mMyLocationOverlay == null)
+		{
+			mMyLocationOverlay = new PositionOverlay(this,mapView);
+		}
+		mapView.getOverlays().add(mMyLocationOverlay);
+		mMyLocationOverlay.enableMyLocation();
+		mMyLocationOverlay.runOnFirstFix(new Runnable() { public void run() {
+			mapView.getController().animateTo(mMyLocationOverlay.getMyLocation());
+		}});
+
 	}
 }

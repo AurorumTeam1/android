@@ -1,6 +1,7 @@
 package org.domain.mobile.android.mymapview;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.ActionBar;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
 public class MyMapViewActivity extends MapActivity implements OnTouchListener {
@@ -71,12 +73,19 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			}
 		}
 	};
-	private boolean isEditable; // Temp boolean to enable working with just one
-	// area, remove when implementing multiple
-	// areas.
+	
+	private int isEditing() {
+		List<Overlay> overlays = mapView.getOverlays();
+		for (int i = 0; i < overlays.size(); i++) {
+			if(overlays.get(i) instanceof HelloItemizedOverlay) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
 	public boolean onTouch(View v, MotionEvent event) {
-		if (mapView.getOverlays().size() <= 1) {
+		if (isEditing() < 0) {
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				isPinch = false;
@@ -85,16 +94,25 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			case MotionEvent.ACTION_MOVE:
 				if (event.getPointerCount() > 1) {
 					isPinch = true;
-				} else {
-					isDrag = true;
+				}
+				// From port_2.3.4 #8 Fine tuning the drag handling since xperia active has a less sensitive touch screen.
+				else if(!isDrag && event.getHistorySize() > 0) { 
+					  if(Math.abs(event.getHistoricalX(0) - event.getX()) > 0.5f || Math.abs(event.getHistoricalY(0) - event.getY()) > 0.5f){
+						  isDrag = true;
+					  }
 				}
 				break;
 			case MotionEvent.ACTION_UP:
 				if (!isPinch && !isDrag) {
 					GeoPoint point = mapView.getProjection().fromPixels((int) event.getX(), (int) event.getY());
-					if (isEditable) {
-						addOverlay(point);
-					}
+					addOverlay(point);
+				}
+				break;
+			//SE Xperia Active often signals ACTION_CANCEL instead of ACTION_UP
+			case MotionEvent.ACTION_CANCEL: 
+				if (!isPinch && !isDrag) {
+					GeoPoint point = mapView.getProjection().fromPixels((int) event.getX(), (int) event.getY());
+					addOverlay(point);
 				}
 				break;
 			}
@@ -106,43 +124,53 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		if (mapView.getOverlays().size() == 0) {
 			return;
 		}
-
-		FileWriter fileWriter = new FileWriter(getExternalFilesDir(null).getAbsolutePath(), "testarea1",
-				(AreaOverlay) mapView.getOverlays().get(0));
-		fileWriter.write();
-	}
-
-	private void loadArea() {
-		if (mapView.getOverlays().size() > 0) { // Do not load new if one
-			// already exists.
-			return;
-		}
-
-		try {
-			FileWriter fileWriter = new FileWriter(getExternalFilesDir(null).getAbsolutePath(), "testarea1");
-			AreaOverlay loadadArea = fileWriter.read();
-			if (loadadArea == null || loadadArea.getPoints().size() == 0) {
-				return;
+		List<AreaOverlay> areas = new ArrayList<AreaOverlay>();
+		List<Overlay> overlays = mapView.getOverlays();
+		for(Overlay overlay:overlays) {
+			if(overlay instanceof AreaOverlay) {
+				areas.add((AreaOverlay) overlay);
 			}
-
-			mapView.getOverlays().add(0, loadadArea);
-			isEditable = false;
-			findViewById(R.id.ok_button).setEnabled(false);
-			findViewById(R.id.cancel_button).setEnabled(true);
-
-			centerOnOverlay(loadadArea.getPoints());
+		}
+		try {
+			AreaWriter writer = new XMLFileHandler(getExternalFilesDir(null).getAbsolutePath(), "areas.xml");
+			writer.write(areas);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	protected void hideMarkers() {
-		if (mapView.getOverlays().size() > 1) { // remove the overlay with
-			// markers
-			mapView.getOverlays().remove(1);
-			mapView.invalidate();
+	private void loadArea() {
+		try {
+			AreaParser parser = new XMLFileHandler(getExternalFilesDir(null).getAbsolutePath(), "areas.xml");
+			List<AreaOverlay> areas = parser.parse();
+			if (areas.size() > 0) {
+				mapView.getOverlays().addAll(areas);
+				centerOnOverlay(areas.get(areas.size() - 1).getPoints());
+			}
+			findViewById(R.id.cancel_button).setEnabled(true);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+	}
+	
+	protected void hideMarkers() {		
+		Overlay o;
+		for (int i = mapView.getOverlays().size()-1; i >= 0; i--) {
+			o = mapView.getOverlays().get(i);
+			if(o instanceof HelloItemizedOverlay) {
+				mapView.getOverlays().set(i, transform((HelloItemizedOverlay)o));
+				break;
+			}
+		}
+		mapView.invalidate();
+	}
+	
+	protected AreaOverlay transform(HelloItemizedOverlay hio) {
+		AreaOverlay ao = new AreaOverlay();
+		for (int j = 0; j < hio.size(); j++) {
+			ao.addPoint(hio.getItem(j).getPoint());
+		}
+		return ao;
 	}
 
 	private void addOverlay(GeoPoint p) {
@@ -151,16 +179,18 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 				(Button) findViewById(R.id.button_remove));
 		OverlayItem overlayItem = new OverlayItem(p, null, null);
 		itemizedOverlay.addOverlay(overlayItem);
-		mapView.getOverlays().add(0, new AreaOverlay().addPoint(p));
+		//mapView.getOverlays().add(0, new AreaOverlay().addPoint(p));
 		mapView.getOverlays().add(itemizedOverlay);
 		findViewById(R.id.ok_button).setEnabled(true);
 		findViewById(R.id.cancel_button).setEnabled(true);
 	}
 
 	protected void clearOverlays() {
-		mapView.getOverlays().clear();
+		int index = isEditing();
+		if(index >= 0) {
+			mapView.getOverlays().remove(index);
+		}
 		mapView.invalidate();
-		isEditable = true;
 	}
 
 	public void centerOnOverlay(ArrayList<GeoPoint> points) {

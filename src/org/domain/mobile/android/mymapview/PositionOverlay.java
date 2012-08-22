@@ -1,7 +1,7 @@
 package org.domain.mobile.android.mymapview;
 
 import java.text.DecimalFormat;
-
+import java.text.DecimalFormatSymbols;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -23,10 +23,9 @@ public class PositionOverlay extends MyLocationOverlay {
 		return super.dispatchTap();
 	}
 
-	double roundTwoDecimals(double d) {
-		DecimalFormat twoDForm = new DecimalFormat("#.##");
-//		return Double.valueOf(twoDForm.format(d));
-		return d;
+	private double roundTwoDecimals(double d) {
+		DecimalFormat twoDForm = new DecimalFormat("#*" + DecimalFormatSymbols.getInstance().getDecimalSeparator() + "##");
+		return Double.valueOf(twoDForm.format(d));
 	}
 
 }

@@ -3,7 +3,10 @@ package org.domain.mobile.android.mymapview;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
@@ -59,6 +62,37 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	}
 
 	@Override
+	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+		Point[] pxPoints = new Point[this.mOverlayItems.size()];
+		Path area = new Path();
+		area.setFillType(Path.FillType.EVEN_ODD);
+		for (int i = 0; i < pxPoints.length; i++) {
+			mapView.getProjection().toPixels(this.mOverlayItems.get(i).getPoint(), pxPoints[i] = new Point());
+			if(i == 0) {
+				area.moveTo(pxPoints[i].x, pxPoints[i].y);
+			} else {
+				area.lineTo(pxPoints[i].x, pxPoints[i].y);
+			}
+		}
+		area.close();
+
+		Paint areaPaint = new Paint();
+		areaPaint.setColor(android.graphics.Color.GREEN);
+		areaPaint.setStyle(Paint.Style.FILL);
+		areaPaint.setAntiAlias(true);
+		areaPaint.setAlpha(70);
+		canvas.drawPath(area, areaPaint);
+
+		areaPaint.setStrokeWidth(2);
+		areaPaint.setColor(android.graphics.Color.BLUE);
+		areaPaint.setStyle(Paint.Style.STROKE);
+		areaPaint.setAlpha(90);
+		canvas.drawPath(area, areaPaint);
+		
+		super.draw(canvas, mapView, shadow);
+	}
+
+	@Override
 	protected OverlayItem createItem(int arg0) {
 		return mOverlayItems.get(arg0);
 	}
@@ -85,7 +119,7 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 		}
 		// Tap is outside overlay, add new point
 		OverlayItem overlayItem = new OverlayItem(p, "", "");
-		((AreaOverlay) mapView.getOverlays().get(0)).addPoint(p);
+//		((AreaOverlay) mapView.getOverlays().get(0)).addPoint(p);
 		this.addOverlay(overlayItem);
 		populate();
 		return true;
@@ -93,7 +127,7 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event, MapView mapView) {
-		AreaOverlay area = (AreaOverlay) mapView.getOverlays().get(0);
+		//AreaOverlay area = (AreaOverlay) mapView.getOverlays().get(0);
 
 		final int action = event.getAction();
 		if (action == MotionEvent.ACTION_DOWN) {
@@ -118,7 +152,7 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 					inDrag = item;
 					oldIndex = mOverlayItems.indexOf(inDrag);
 					mOverlayItems.remove(inDrag);
-					area.getPoints().remove(oldIndex);
+					//area.getPoints().remove(oldIndex);
 					populate();
 
 					xDragTouchOffset = 0;
@@ -176,7 +210,7 @@ public class HelloItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 				OverlayItem toDrop = new OverlayItem(pt, inDrag.getTitle(), inDrag.getSnippet());
 
 				mOverlayItems.add(oldIndex, toDrop);
-				area.getPoints().add(oldIndex, toDrop.getPoint());
+				//area.getPoints().add(oldIndex, toDrop.getPoint());
 				populate();
 			}
 

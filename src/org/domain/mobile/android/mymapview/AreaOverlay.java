@@ -2,6 +2,7 @@ package org.domain.mobile.android.mymapview;
 
 import java.util.ArrayList;
 
+import android.R.string;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -15,9 +16,19 @@ import com.google.android.maps.Overlay;
 public class AreaOverlay extends Overlay {
 
 	private ArrayList<GeoPoint> points;
+	private String Name; 
+
+	public String getName() {
+		return Name;
+	}
+
+	public void setName(String name) {
+		Name = name;
+	}
 
 	public AreaOverlay() {
 		this.points = new ArrayList<GeoPoint>();
+		this.Name = "";
 	}
 
 	public AreaOverlay addPoint(GeoPoint point) {

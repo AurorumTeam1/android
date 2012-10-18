@@ -23,7 +23,7 @@ public class XMLFileHandler extends BaseFileHandler {
 
 	static final String AREA = "area";
 	static final String AREAS = AREA + "s";
-//	static final String NAME = "name";
+	static final String NAME = "name";
 //	static final String DESCRIPTION = "description";
 	static final String POINT = "point";
 	static final String POINTS = POINT + "s";
@@ -76,8 +76,8 @@ public class XMLFileHandler extends BaseFileHandler {
 								area.addPoint(new GeoPoint(lat, lon));
 							}
 						}
-//					} else if (name.equalsIgnoreCase(NAME)) {
-//						area.setName(property.getTextContent());
+					} else if (name.equalsIgnoreCase(NAME)) {
+						area.setName(property.getTextContent());
 //					} else if (name.equalsIgnoreCase(DESCRIPTION)) {
 //						area.setDescription(property.getTextContent());
 					}
@@ -102,9 +102,9 @@ public class XMLFileHandler extends BaseFileHandler {
 			List<GeoPoint> points;
 			for (AreaOverlay area:areas) {
 				serializer.startTag("", AREA);
-//				serializer.startTag("", NAME);
-//				serializer.text(area.getName());
-//				serializer.endTag("", NAME);
+				serializer.startTag("", NAME);
+				serializer.text(area.getName());
+				serializer.endTag("", NAME);
 //				serializer.startTag("", DESCRIPTION);
 //				serializer.text(area.getDescription());
 //				serializer.endTag("", DESCRIPTION);

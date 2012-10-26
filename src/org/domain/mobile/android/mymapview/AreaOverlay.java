@@ -2,6 +2,7 @@ package org.domain.mobile.android.mymapview;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -13,21 +14,19 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
 public class AreaOverlay extends Overlay {
-
 	private ArrayList<GeoPoint> points;
-	private String Name; 
+	private String Name;
+	private Context myContext; 
 
-	public String getName() {
-		return Name;
-	}
-
-	public void setName(String name) {
-		Name = name;
-	}
-
-	public AreaOverlay() {
+	public AreaOverlay(Context context) {
+		this.myContext = context;
 		this.points = new ArrayList<GeoPoint>();
 		this.Name = "";
+	}
+
+	public AreaOverlay(Context context, String name) {
+		this(context);
+		this.Name = name;
 	}
 
 	public AreaOverlay addPoint(GeoPoint point) {
@@ -37,9 +36,15 @@ public class AreaOverlay extends Overlay {
 
 	@Override
 	public boolean onTap(GeoPoint geoPoint, MapView mapView) {
-		if(isInside(geoPoint))
-			Toast.makeText(mapView.getContext(), "Inside", Toast.LENGTH_SHORT).show();
-		return false;
+		if(isInside(geoPoint)) {
+//			Toast.makeText(mapView.getContext(), "Inside area: " + getName(), Toast.LENGTH_SHORT).show();
+			((MyMapViewActivity) myContext).showAreaDetails(this);
+			return true;
+		}
+		else {
+			((MyMapViewActivity) myContext).showAreaDetails(null); 	
+			return false;
+		}
 	}
 
 	@Override
@@ -99,4 +104,14 @@ public class AreaOverlay extends Overlay {
 		}
 		return isInside;
 	}
+
+	
+	public String getName() {
+		return Name;
+	}
+
+	public void setName(String name) {
+		Name = name;
+	}
+
 }

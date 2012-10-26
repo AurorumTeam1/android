@@ -14,6 +14,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlSerializer;
 
+import android.content.Context;
 import android.util.Xml;
 import android.util.Xml.Encoding;
 
@@ -30,9 +31,11 @@ public class XMLFileHandler extends BaseFileHandler {
 	static final String LATITUDE = "latitude";
 	static final String LONGITUDE = "longitude";
 //	static final String POINTORDER = "order";
+	private Context myContext;
 
-	public XMLFileHandler(String filePath, String fileName) {
+	public XMLFileHandler(Context context, String filePath, String fileName) {
 		super(filePath, fileName);
+		this.myContext = context;
 	}
 
 	@Override
@@ -45,7 +48,7 @@ public class XMLFileHandler extends BaseFileHandler {
 			Element root = dom.getDocumentElement();
 			NodeList items = root.getElementsByTagName(AREA);
 			for (int i = 0; i < items.getLength(); i++) {
-				AreaOverlay area = new AreaOverlay();
+				AreaOverlay area = new AreaOverlay(myContext, "Area " + i);
 				Node item = items.item(i);
 				NodeList properties = item.getChildNodes();
 				for (int j = 0; j < properties.getLength(); j++) {

@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
@@ -66,6 +67,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 				findViewById(R.id.main_actionbar).setVisibility(View.GONE);
 				findViewById(R.id.edit_area_actionbar).setVisibility(View.VISIBLE);
 				isEditMode = true;
+				showAreaDetails(null);
 				break;
 			case R.id.ok_button:
 				findViewById(R.id.cancel_button).setEnabled(true);
@@ -146,7 +148,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			}
 		}
 		try {
-			AreaWriter writer = new XMLFileHandler(getExternalFilesDir(null).getAbsolutePath(), "areas.xml");
+			AreaWriter writer = new XMLFileHandler(this, getExternalFilesDir(null).getAbsolutePath(), "areas.xml");
 			writer.write(areas);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -155,7 +157,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 
 	private void loadArea() {
 		try {
-			AreaParser parser = new XMLFileHandler(getExternalFilesDir(null).getAbsolutePath(), "areas.xml");
+			AreaParser parser = new XMLFileHandler(this, getExternalFilesDir(null).getAbsolutePath(), "areas.xml");
 			List<AreaOverlay> areas = parser.parse();
 			if (areas.size() > 0) {
 				mapView.getOverlays().addAll(areas);
@@ -172,15 +174,15 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		for (int i = mapView.getOverlays().size()-1; i >= 0; i--) {
 			o = mapView.getOverlays().get(i);
 			if(o instanceof HelloItemizedOverlay) {
-				mapView.getOverlays().set(i, transform((HelloItemizedOverlay)o));
+				mapView.getOverlays().set(i, transform((HelloItemizedOverlay)o, "Area " + i));
 				break;
 			}
 		}
 		mapView.invalidate();
 	}
 	
-	protected AreaOverlay transform(HelloItemizedOverlay hio) {
-		AreaOverlay ao = new AreaOverlay();
+	protected AreaOverlay transform(HelloItemizedOverlay hio, String name) {
+		AreaOverlay ao = new AreaOverlay(this, name);
 		for (int j = 0; j < hio.size(); j++) {
 			ao.addPoint(hio.getItem(j).getPoint());
 		}
@@ -260,6 +262,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		else {
 			Toast.makeText(mapView.getContext(), "Failed to clear all areas!", Toast.LENGTH_LONG).show();
 		}
+		showAreaDetails(null);
 		mapView.getOverlays().clear();
 		mapView.invalidate();
 	}
@@ -275,5 +278,15 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			mapView.getController().animateTo(mMyLocationOverlay.getMyLocation());
 		}});
 
+	}
+
+	public void showAreaDetails(AreaOverlay areaOverlay) {
+		if (areaOverlay != null) {
+			((View) findViewById(R.id.details_overlay)).setVisibility(View.VISIBLE);
+			((TextView) findViewById(R.id.area_details_name)).setText(areaOverlay.getName());
+		}
+		else {
+			((View) findViewById(R.id.details_overlay)).setVisibility(View.GONE);
+		}
 	}
 }

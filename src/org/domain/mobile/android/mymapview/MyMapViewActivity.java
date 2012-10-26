@@ -1,5 +1,6 @@
 package org.domain.mobile.android.mymapview;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -230,10 +232,25 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		case R.id.add_new_marker:
 			getLocationUpdates();
 			return true;
+		case R.id.clear_all_areas:
+			clearAllAreas();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
+
+	private void clearAllAreas() {
+		File file = new File(getExternalFilesDir(null).getAbsolutePath(), "areas.xml");
+		if (file.delete() == true) {
+			Toast.makeText(mapView.getContext(), "Cleared all areas!", Toast.LENGTH_SHORT).show();
+		}
+		else {
+			Toast.makeText(mapView.getContext(), "Failed to clear all areas!", Toast.LENGTH_LONG).show();
+		}
+		mapView.getOverlays().clear();
+		mapView.invalidate();
+	}
 
 	private void getLocationUpdates() {
 		if(mMyLocationOverlay == null)

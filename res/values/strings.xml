@@ -8,6 +8,7 @@
     <string name="remove_label">Remove</string>
     <string name="loading">Loading</string>
     <string name="add_new_marker">Add Your Position</string>
+    <string name="clear_all_areas">Clear all areas</string>
     <string name="area_default_name">Area Name</string>
     <string name="area_default_description">Area Description</string>
     

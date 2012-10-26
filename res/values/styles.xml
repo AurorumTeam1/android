@@ -236,4 +236,32 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+	<style name="MyActionBar.TitleTextStyle"
+	    parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/actionMenuTextAppearance</item>
+        <item name="android:textColor">?android:attr/actionMenuTextColor</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:padding">4dp</item>
+	</style>
+	
+	<style name="TextAppearance.Widget.ActionBar.Title"
+	       parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">#ffffffff</item>
+	</style>
+	
+	<style name="TextAppearance.Widget.ActionBar.Subtitle"
+	       parent="@android:style/TextAppearance.Small">
+	</style>
+	
+	<style name="TextAppearance.Medium">
+	    <item name="android:textSize">18sp</item>
+	</style>
+	
+	<style name="TextAppearance.Small">
+	    <item name="android:textSize">14sp</item>
+	</style>	
 </resources>

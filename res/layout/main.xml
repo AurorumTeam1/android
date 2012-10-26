@@ -40,14 +40,8 @@
         <include
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/edit_area_custom_actionbar" />
+            layout="@layout/custom_actionbar" />
 
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-			android:layout_alignParentBottom="true"
-            layout="@layout/area_details_overlay" />
-        
         <Button
             android:id="@+id/button_remove"
             style="?android:attr/buttonBarButtonStyle"
@@ -57,6 +51,14 @@
             android:drawableStart="@drawable/ic_menu_remove_field_holo_light"
             android:text="@string/remove_label"
             android:visibility="invisible" />
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+            layout="@layout/area_details_overlay"
+            android:visibility="gone" />
+        
     </RelativeLayout>
 
 </LinearLayout>

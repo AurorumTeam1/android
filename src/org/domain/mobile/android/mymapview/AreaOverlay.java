@@ -2,7 +2,6 @@ package org.domain.mobile.android.mymapview;
 
 import java.util.ArrayList;
 
-import android.R.string;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;

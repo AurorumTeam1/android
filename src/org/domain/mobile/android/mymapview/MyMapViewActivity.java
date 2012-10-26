@@ -29,7 +29,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	private boolean isPinch = false;
 	private boolean isDrag = false;
 	private PositionOverlay mMyLocationOverlay;
-	Thread mThread;
+	private boolean isEditMode = false;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -46,6 +46,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		doneActionView.setOnClickListener(customActionBarListener);
 		View cancelActionView = findViewById(R.id.cancel_button);
 		cancelActionView.setOnClickListener(customActionBarListener);
+		findViewById(R.id.new_button).setOnClickListener(customActionBarListener);
 		findViewById(R.id.cancel_button).setEnabled(false);
 		findViewById(R.id.ok_button).setEnabled(false);
 
@@ -61,16 +62,27 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
+			case R.id.new_button:
+				findViewById(R.id.main_actionbar).setVisibility(View.GONE);
+				findViewById(R.id.edit_area_actionbar).setVisibility(View.VISIBLE);
+				isEditMode = true;
+				break;
 			case R.id.ok_button:
 				findViewById(R.id.cancel_button).setEnabled(true);
 				findViewById(R.id.ok_button).setEnabled(false);
 				hideMarkers();
 				saveArea();
+				findViewById(R.id.edit_area_actionbar).setVisibility(View.GONE);
+				findViewById(R.id.main_actionbar).setVisibility(View.VISIBLE);
+				isEditMode = false;
 				break;
 			case R.id.cancel_button:
 				findViewById(R.id.cancel_button).setEnabled(false);
 				findViewById(R.id.ok_button).setEnabled(false);
 				clearOverlays();
+				findViewById(R.id.edit_area_actionbar).setVisibility(View.GONE);
+				findViewById(R.id.main_actionbar).setVisibility(View.VISIBLE);
+				isEditMode = false;
 				break;
 			}
 		}
@@ -87,7 +99,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	}
 
 	public boolean onTouch(View v, MotionEvent event) {
-		if (isEditing() < 0) {
+		if (isEditing() < 0 && isEditMode) {
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				isPinch = false;

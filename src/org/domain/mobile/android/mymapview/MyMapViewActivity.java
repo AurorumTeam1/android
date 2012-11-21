@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,10 +45,13 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setOnTouchListener(this);
 		View doneActionView = findViewById(R.id.ok_button);
-		doneActionView.setOnClickListener(customActionBarListener);
+		doneActionView.setOnClickListener(onClickListener);
 		View cancelActionView = findViewById(R.id.cancel_button);
-		cancelActionView.setOnClickListener(customActionBarListener);
-		findViewById(R.id.new_button).setOnClickListener(customActionBarListener);
+		cancelActionView.setOnClickListener(onClickListener);
+		findViewById(R.id.new_button).setOnClickListener(onClickListener);
+		findViewById(R.id.edit_button).setOnClickListener(onClickListener);
+		findViewById(R.id.done_button).setOnClickListener(onClickListener);
+		findViewById(R.id.details_overlay).setOnClickListener(onClickListener);
 		findViewById(R.id.cancel_button).setEnabled(false);
 		findViewById(R.id.ok_button).setEnabled(false);
 
@@ -59,36 +63,38 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		return false;
 	}
 
-	private OnClickListener customActionBarListener = new OnClickListener() {
+	private OnClickListener onClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.new_button:
-				findViewById(R.id.main_actionbar).setVisibility(View.GONE);
-				findViewById(R.id.edit_area_actionbar).setVisibility(View.VISIBLE);
-				isEditMode = true;
+				showEditActionbar();
 				showAreaDetails(null);
+				break;
+			case R.id.edit_button:
+			case R.id.details_overlay:
+				showDetailsEditOverlay();
+				break;
+			case R.id.done_button:
+				hideDetailsEditOverlay();
 				break;
 			case R.id.ok_button:
 				findViewById(R.id.cancel_button).setEnabled(true);
 				findViewById(R.id.ok_button).setEnabled(false);
 				hideMarkers();
 				saveArea();
-				findViewById(R.id.edit_area_actionbar).setVisibility(View.GONE);
-				findViewById(R.id.main_actionbar).setVisibility(View.VISIBLE);
-				isEditMode = false;
+				showMainActionBar();
 				break;
 			case R.id.cancel_button:
 				findViewById(R.id.cancel_button).setEnabled(false);
 				findViewById(R.id.ok_button).setEnabled(false);
 				clearOverlays();
-				findViewById(R.id.edit_area_actionbar).setVisibility(View.GONE);
-				findViewById(R.id.main_actionbar).setVisibility(View.VISIBLE);
-				isEditMode = false;
+				showMainActionBar();
 				break;
 			}
 		}
 	};
+	private AreaOverlay selectedArea;
 	
 	private int isEditing() {
 		List<Overlay> overlays = mapView.getOverlays();
@@ -98,6 +104,29 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			}
 		}
 		return -1;
+	}
+
+	protected void showDetailsEditOverlay() {
+		//TODO: Zoom in on selected area
+
+		if (selectedArea != null) {
+			((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
+			((View) findViewById(R.id.done_button)).setVisibility(View.VISIBLE);
+			((View) findViewById(R.id.details_overlay)).setVisibility(View.GONE);
+			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.VISIBLE);
+			((TextView) findViewById(R.id.area_details_name_edit)).setText(selectedArea.getName());
+		}
+		else {
+			Toast.makeText(mapView.getContext(), "No area selected", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	protected void hideDetailsEditOverlay() {
+		((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
+		((View) findViewById(R.id.edit_button)).setVisibility(View.VISIBLE);
+		((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.GONE);
+		((View) findViewById(R.id.details_overlay)).setVisibility(View.VISIBLE);
+		showMainActionBar();
 	}
 
 	public boolean onTouch(View v, MotionEvent event) {
@@ -281,12 +310,35 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	}
 
 	public void showAreaDetails(AreaOverlay areaOverlay) {
+		selectedArea = areaOverlay;
 		if (areaOverlay != null) {
+			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.GONE);
 			((View) findViewById(R.id.details_overlay)).setVisibility(View.VISIBLE);
 			((TextView) findViewById(R.id.area_details_name)).setText(areaOverlay.getName());
+			((View) findViewById(R.id.new_button)).setVisibility(View.GONE);
+			((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
+			((View) findViewById(R.id.edit_button)).setVisibility(View.VISIBLE);
 		}
 		else {
+			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.GONE);
 			((View) findViewById(R.id.details_overlay)).setVisibility(View.GONE);
+			((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
+			((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
+			((View) findViewById(R.id.new_button)).setVisibility(View.VISIBLE);
 		}
+	}
+
+
+	
+	private void showEditActionbar() {
+		isEditMode = true;
+		findViewById(R.id.main_actionbar).setVisibility(View.GONE);
+		findViewById(R.id.edit_area_actionbar).setVisibility(View.VISIBLE);
+	}
+
+	private void showMainActionBar() {
+		isEditMode = false;
+		findViewById(R.id.edit_area_actionbar).setVisibility(View.GONE);
+		findViewById(R.id.main_actionbar).setVisibility(View.VISIBLE);
 	}
 }

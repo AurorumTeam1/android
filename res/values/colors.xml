@@ -160,5 +160,6 @@
 
     <color name="text">#ffffffff</color>
     <color name="bar_background">#80000000</color>
+    <color name="edit_overlay_background">#a0000000</color>
     
 </resources>

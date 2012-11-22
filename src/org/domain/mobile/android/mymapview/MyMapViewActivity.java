@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -69,7 +68,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			switch (v.getId()) {
 			case R.id.new_button:
 				showEditActionbar();
-				showAreaDetails(null);
 				break;
 			case R.id.edit_button:
 			case R.id.details_overlay:
@@ -104,29 +102,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			}
 		}
 		return -1;
-	}
-
-	protected void showDetailsEditOverlay() {
-		//TODO: Zoom in on selected area
-
-		if (selectedArea != null) {
-			((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
-			((View) findViewById(R.id.done_button)).setVisibility(View.VISIBLE);
-			((View) findViewById(R.id.details_overlay)).setVisibility(View.GONE);
-			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.VISIBLE);
-			((TextView) findViewById(R.id.area_details_name_edit)).setText(selectedArea.getName());
-		}
-		else {
-			Toast.makeText(mapView.getContext(), "No area selected", Toast.LENGTH_SHORT).show();
-		}
-	}
-
-	protected void hideDetailsEditOverlay() {
-		((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
-		((View) findViewById(R.id.edit_button)).setVisibility(View.VISIBLE);
-		((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.GONE);
-		((View) findViewById(R.id.details_overlay)).setVisibility(View.VISIBLE);
-		showMainActionBar();
 	}
 
 	public boolean onTouch(View v, MotionEvent event) {
@@ -190,7 +165,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			List<AreaOverlay> areas = parser.parse();
 			if (areas.size() > 0) {
 				mapView.getOverlays().addAll(areas);
-				centerOnOverlay(areas.get(areas.size() - 1).getPoints());
+				centerOnOverlay(areas.get(areas.size() - 1).getPoints(), 1);
 			}
 			findViewById(R.id.cancel_button).setEnabled(true);
 		} catch (Exception e) {
@@ -238,7 +213,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		mapView.invalidate();
 	}
 
-	public void centerOnOverlay(ArrayList<GeoPoint> points) {
+	public void centerOnOverlay(ArrayList<GeoPoint> points, double fitFactor) {
 		int minLat = Integer.MAX_VALUE;
 		int minLong = Integer.MAX_VALUE;
 		int maxLat = Integer.MIN_VALUE;
@@ -251,8 +226,8 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			maxLong = Math.max(l.getLongitudeE6(), maxLong);
 		}
 
-		mapView.getController().zoomToSpan(Math.abs(minLat - maxLat), Math.abs(minLong - maxLong));
-		mapView.getController().animateTo(new GeoPoint((maxLat + minLat) / 2, (maxLong + minLong) / 2));
+		mapView.getController().zoomToSpan((int) (Math.abs(minLat - maxLat) * fitFactor), (int) (Math.abs(minLong - maxLong) * fitFactor));
+		mapView.getController().animateTo(new GeoPoint((int) ((maxLat + minLat) / 2 / fitFactor), (maxLong + minLong) / 2));
 	}
 
 	/**
@@ -311,6 +286,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 
 	public void showAreaDetails(AreaOverlay areaOverlay) {
 		selectedArea = areaOverlay;
+		showMainActionBar();
 		if (areaOverlay != null) {
 			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.GONE);
 			((View) findViewById(R.id.details_overlay)).setVisibility(View.VISIBLE);
@@ -339,6 +315,37 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	private void showMainActionBar() {
 		isEditMode = false;
 		findViewById(R.id.edit_area_actionbar).setVisibility(View.GONE);
+		findViewById(R.id.main_actionbar).setBackgroundColor(getResources().getColor(R.color.bar_background));
+		((TextView)findViewById(R.id.actionbar_title)).setTextColor(getResources().getColor(R.color.text));
+		((View) findViewById(R.id.new_button)).setVisibility(View.VISIBLE);
 		findViewById(R.id.main_actionbar).setVisibility(View.VISIBLE);
+	}
+
+	protected void showDetailsEditOverlay() {
+
+		if (selectedArea != null) {
+			//TODO: Zoom in on selected area
+			centerOnOverlay(selectedArea.getPoints(), 1.5);
+
+			//Set colors and visibility
+			findViewById(R.id.main_actionbar).setBackgroundColor(getResources().getColor(R.color.edit_overlay_background));
+			((TextView)findViewById(R.id.actionbar_title)).setTextColor(getResources().getColor(R.color.text_dark));
+			((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
+			((View) findViewById(R.id.details_overlay)).setVisibility(View.GONE);
+			((View) findViewById(R.id.done_button)).setVisibility(View.VISIBLE);
+			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.VISIBLE);
+			((TextView) findViewById(R.id.area_details_name_edit)).setText(selectedArea.getName());
+		}
+		else {
+			Toast.makeText(mapView.getContext(), "No area selected", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	protected void hideDetailsEditOverlay() {
+		((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
+		((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
+		((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.GONE);
+		((View) findViewById(R.id.details_overlay)).setVisibility(View.VISIBLE);
+		showMainActionBar();
 	}
 }

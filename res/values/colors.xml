@@ -159,7 +159,8 @@
     <color name="appwidget_no_events">#ffffffff</color>
 
     <color name="text">#ffffffff</color>
+    <color name="text_dark">#ff444444</color>
     <color name="bar_background">#80000000</color>
-    <color name="edit_overlay_background">#a0000000</color>
+    <color name="edit_overlay_background">#d0ffffff</color>
     
 </resources>

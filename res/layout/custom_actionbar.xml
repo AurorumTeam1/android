@@ -59,7 +59,7 @@
             android:maxLines="1"
             android:text="@string/btn_done"
             android:textAppearance="?android:attr/actionMenuTextAppearance"
-            android:textColor="@color/text"
+            android:textColor="@color/text_dark"
             android:visibility="gone" />
         
     </LinearLayout>

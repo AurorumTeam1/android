@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.domain.mobile.android.mymapview.AreaDetailsView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/details_overlay"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -30,27 +31,27 @@
             android:textColor="@color/text" />
 
         <TextView
-            android:id="@+id/area_details_description"
+            android:id="@+id/area_details_owner"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawablePadding="0dp"
             android:maxLines="1"
             android:padding="12dp"
-            android:text="@string/area_default_description"
+            android:text="@string/area_default_owner"
             android:textAppearance="?android:attr/actionMenuTextAppearance"
             android:textStyle="bold"
             android:textColor="@color/text" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/editText1"
+        android:id="@+id/area_details_description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:maxLines="4"
         android:ems="10"
         android:padding="12dp"
-        android:text="Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing..."
+        android:text="Area Description: Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing..."
         android:textColor="@color/text" />
 
-</LinearLayout>
+</org.domain.mobile.android.mymapview.AreaDetailsView>

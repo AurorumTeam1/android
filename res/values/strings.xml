@@ -12,6 +12,7 @@
     <string name="add_new_marker">Add Your Position</string>
     <string name="clear_all_areas">Clear all areas</string>
     <string name="area_default_name">Area Name</string>
+    <string name="area_default_owner">Area Owner</string>
     <string name="area_default_description">Area Description</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_area_details">AreaDetailsActivity</string>

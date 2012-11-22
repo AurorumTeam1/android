@@ -24,6 +24,7 @@ public class XMLFileHandler extends BaseFileHandler {
 
 	static final String AREA = "area";
 	static final String AREAS = AREA + "s";
+	static final String ID = "id";
 	static final String NAME = "name";
 //	static final String DESCRIPTION = "description";
 	static final String POINT = "point";
@@ -48,7 +49,7 @@ public class XMLFileHandler extends BaseFileHandler {
 			Element root = dom.getDocumentElement();
 			NodeList items = root.getElementsByTagName(AREA);
 			for (int i = 0; i < items.getLength(); i++) {
-				AreaOverlay area = new AreaOverlay(myContext, "Area " + i);
+				AreaOverlay area = new AreaOverlay(myContext, i);
 				Node item = items.item(i);
 				NodeList properties = item.getChildNodes();
 				for (int j = 0; j < properties.getLength(); j++) {
@@ -105,6 +106,9 @@ public class XMLFileHandler extends BaseFileHandler {
 			List<GeoPoint> points;
 			for (AreaOverlay area:areas) {
 				serializer.startTag("", AREA);
+				serializer.startTag("", ID);
+				serializer.text(String.valueOf(area.getId()));
+				serializer.endTag("", ID);
 				serializer.startTag("", NAME);
 				serializer.text(area.getName());
 				serializer.endTag("", NAME);

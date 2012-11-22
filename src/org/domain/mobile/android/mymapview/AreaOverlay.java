@@ -14,35 +14,39 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
 public class AreaOverlay extends Overlay {
-	private ArrayList<GeoPoint> points;
-	private String Name;
-	private Context myContext; 
+	private ArrayList<GeoPoint> mPoints;
+	private Context mContext; 
+
+	private int mId;
+	private String mName;
+	private String mDescription;
+	private String mOwner;
 
 	public AreaOverlay(Context context) {
-		this.myContext = context;
-		this.points = new ArrayList<GeoPoint>();
-		this.Name = "";
+		this.mContext = context;
+		this.mPoints = new ArrayList<GeoPoint>();
+		this.mName = "";
 	}
 
-	public AreaOverlay(Context context, String name) {
+	public AreaOverlay(Context context, int id) {
 		this(context);
-		this.Name = name;
+		setId(id);
+		setName(String.valueOf(id));
 	}
 
 	public AreaOverlay addPoint(GeoPoint point) {
-		this.points.add(point);
+		this.mPoints.add(point);
 		return this;
 	}
 
 	@Override
 	public boolean onTap(GeoPoint geoPoint, MapView mapView) {
 		if(isInside(geoPoint)) {
-//			Toast.makeText(mapView.getContext(), "Inside area: " + getName(), Toast.LENGTH_SHORT).show();
-			((MyMapViewActivity) myContext).showAreaDetails(this);
+			((MyMapViewActivity) mContext).showDetails(this);
 			return true;
 		}
 		else {
-			((MyMapViewActivity) myContext).showAreaDetails(null); 	
+			((MyMapViewActivity) mContext).hideAreaDetails(); 	
 			return false;
 		}
 	}
@@ -50,11 +54,11 @@ public class AreaOverlay extends Overlay {
 	@Override
 	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
 
-		Point[] pxPoints = new Point[this.points.size()];
+		Point[] pxPoints = new Point[this.mPoints.size()];
 		Path area = new Path();
 		area.setFillType(Path.FillType.EVEN_ODD);
 		for (int i = 0; i < pxPoints.length; i++) {
-			mapView.getProjection().toPixels(this.points.get(i), pxPoints[i] = new Point());
+			mapView.getProjection().toPixels(this.mPoints.get(i), pxPoints[i] = new Point());
 			if(i == 0) {
 				area.moveTo(pxPoints[i].x, pxPoints[i].y);
 			} else {
@@ -78,7 +82,7 @@ public class AreaOverlay extends Overlay {
 	}
 
 	public ArrayList<GeoPoint> getPoints() {
-		return points;
+		return mPoints;
 	}
 
 	protected boolean isInside (GeoPoint point) {
@@ -98,8 +102,8 @@ public class AreaOverlay extends Overlay {
 		 */
 		int i, j;
 		boolean isInside = false;
-		for (i = 0, j = this.points.size()-1; i < this.points.size(); j = i++) {
-			if (((this.points.get(i).getLatitudeE6()>point.getLatitudeE6()) != (this.points.get(j).getLatitudeE6()>point.getLatitudeE6())) && (point.getLongitudeE6() < (this.points.get(j).getLongitudeE6()-this.points.get(i).getLongitudeE6()) * (point.getLatitudeE6()-this.points.get(i).getLatitudeE6()) / (this.points.get(j).getLatitudeE6()-this.points.get(i).getLatitudeE6()) + this.points.get(i).getLongitudeE6()) )
+		for (i = 0, j = this.mPoints.size()-1; i < this.mPoints.size(); j = i++) {
+			if (((this.mPoints.get(i).getLatitudeE6()>point.getLatitudeE6()) != (this.mPoints.get(j).getLatitudeE6()>point.getLatitudeE6())) && (point.getLongitudeE6() < (this.mPoints.get(j).getLongitudeE6()-this.mPoints.get(i).getLongitudeE6()) * (point.getLatitudeE6()-this.mPoints.get(i).getLatitudeE6()) / (this.mPoints.get(j).getLatitudeE6()-this.mPoints.get(i).getLatitudeE6()) + this.mPoints.get(i).getLongitudeE6()) )
 				isInside = !isInside;
 		}
 		return isInside;
@@ -107,11 +111,36 @@ public class AreaOverlay extends Overlay {
 
 	
 	public String getName() {
-		return Name;
+		return mName;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		mName = name;
+	}
+
+	public String getDescription() {
+		return mDescription;
+	}
+
+	public void setDescription(String description) {
+		this.mDescription = description;
+	}
+
+	public String getOwner() {
+		return mOwner;
+	}
+
+	public void setOwner(String owner) {
+		this.mOwner = owner;
+	}
+
+	public int getId() {
+		// TODO Auto-generated method stub
+		return mId;
+	}
+	
+	public void setId(int id) {
+		this.mId = id;
 	}
 
 }

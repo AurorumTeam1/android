@@ -57,6 +57,19 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		loadArea();
 	}
 
+	
+//	TODO: Zoom in on last selected area(?)	
+//	Save:
+//    SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
+//    SharedPreferences.Editor prefsEditor = myPrefs.edit();
+//    prefsEditor.putString(MY_NAME, edittext.getText().toString());
+//    prefsEditor.putString(MY_WALLPAPER, "f664.PNG");
+//    prefsEditor.commit();	
+//    Load:
+//	  SharedPreferences myPrefs = this.getSharedPreferences("myPrefs", MODE_WORLD_READABLE);
+//    String prefName = myPrefs.getString(MY_NAME, 0);
+//    String wallPaper = myPrefs.getString(MY_WALLPAPER, null);
+	
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;

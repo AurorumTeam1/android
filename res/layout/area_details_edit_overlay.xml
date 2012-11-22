@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.domain.mobile.android.mymapview.AreaDetailsOverlay
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/details_edit_overlay"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,7 +16,7 @@
         android:orientation="horizontal"
         android:showDividers="middle"
         android:visibility="visible" >
-
+        
         <EditText
             android:id="@+id/area_details_name_edit"
             android:layout_width="0dip"
@@ -62,4 +63,4 @@
         android:text="Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing...Testing..."
         android:textColor="@color/text_dark" />
 
-</LinearLayout>
+</org.domain.mobile.android.mymapview.AreaDetailsOverlay>

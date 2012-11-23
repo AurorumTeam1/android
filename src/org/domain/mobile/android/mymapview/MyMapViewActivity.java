@@ -364,15 +364,15 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 
 	protected void showDetailsEdit() {
 		if (selectedArea != null) {
-			//TODO: Fix zooming!
+			//TODO: Fix zooming to fit area in visible space!
 			centerOnOverlay(selectedArea.getPoints(), 1.5);
 
 			//Get fields from object
 			((AreaDetailsEditView) findViewById(R.id.details_edit_overlay)).setFields(selectedArea);
 			
 			//Set colors and visibility
-			findViewById(R.id.main_actionbar).setBackgroundColor(getResources().getColor(R.color.edit_overlay_background));
-			((TextView)findViewById(R.id.actionbar_title)).setTextColor(getResources().getColor(R.color.text_dark));
+//			findViewById(R.id.main_actionbar).setBackgroundColor(getResources().getColor(R.color.edit_overlay_background));
+//			((TextView)findViewById(R.id.actionbar_title)).setTextColor(getResources().getColor(R.color.text_dark));
 			((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
 			((View) findViewById(R.id.done_button)).setVisibility(View.VISIBLE);
 			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.VISIBLE);

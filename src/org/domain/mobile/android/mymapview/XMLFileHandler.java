@@ -28,6 +28,7 @@ public class XMLFileHandler extends BaseFileHandler {
 	static final String NAME = "name";
 	static final String OWNER = "owner";
 	static final String DESCRIPTION = "description";
+	static final String COLOR = "color";
 	static final String POINT = "point";
 	static final String POINTS = POINT + "s";
 	static final String LATITUDE = "latitude";
@@ -87,6 +88,8 @@ public class XMLFileHandler extends BaseFileHandler {
 						area.setOwner(property.getTextContent());
 					} else if (name.equalsIgnoreCase(DESCRIPTION)) {
 						area.setDescription(property.getTextContent());
+					} else if (name.equalsIgnoreCase(COLOR)) {
+						area.setColor(Integer.parseInt(property.getTextContent()));
 					}
 				}
 				areas.add(area);
@@ -121,6 +124,9 @@ public class XMLFileHandler extends BaseFileHandler {
 				serializer.startTag("", DESCRIPTION);
 				serializer.text(area.getDescription());
 				serializer.endTag("", DESCRIPTION);
+				serializer.startTag("", COLOR);
+				serializer.text(String.valueOf(area.getColor()));
+				serializer.endTag("", COLOR);
 				serializer.startTag("", POINTS);
 				points = area.getPoints();
 				for (int i = 0; i < points.size(); i++) {

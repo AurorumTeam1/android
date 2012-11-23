@@ -55,4 +55,12 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/text_dark" />
 
+    <Spinner
+        android:id="@+id/color_spinner"
+        android:padding="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/color_array"
+        android:prompt="@string/color_prompt" />
+
 </org.domain.mobile.android.mymapview.AreaDetailsEditView>

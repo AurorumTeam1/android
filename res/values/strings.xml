@@ -17,16 +17,12 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_area_details">AreaDetailsActivity</string>
 
-    <string name="area_prompt">Choose something</string>
-    <string-array name="area_array">
-        <item>Mercury</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
+    <string name="color_prompt">Choose color</string>
+    <string-array name="color_array">
+        <item>Green</item>
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Yellow</item>
     </string-array>
     
 </resources>

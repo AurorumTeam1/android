@@ -15,10 +15,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -59,8 +62,58 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		findViewById(R.id.ok_button).setEnabled(false);
 
 		loadAreas();
+		
+		// TODO: Load last selected area
+//		SharedPreferences myPrefs = this.getSharedPreferences(PREFS_NAME, MODE_WORLD_READABLE);
+//        selectedArea = myPrefs.getInt("selectedArea", null);
+		// TODO: Zoom to selected area
+		
+		// Handle color spinner
+		((Spinner) findViewById(R.id.color_spinner)).setOnItemSelectedListener(
+				new OnItemSelectedListener() {
+					@Override
+					public void onItemSelected(AdapterView<?> parent,
+							View view, int pos, long id) {
+				        switch (pos) {
+						case 0:
+							selectedArea.setColor(android.graphics.Color.GREEN);
+							break;
+						case 1:
+							selectedArea.setColor(android.graphics.Color.RED);
+							break;
+						case 2:
+							selectedArea.setColor(android.graphics.Color.BLUE);
+							break;
+						case 3:
+							selectedArea.setColor(android.graphics.Color.YELLOW);
+							break;
+						default:
+							selectedArea.setColor(android.graphics.Color.GREEN);
+							break;
+						}
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+					}
+				});
+
 	}
 
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		// TODO: Save last selected area
+//		SharedPreferences settings = getSharedPreferences(PREFS_NAME,0);
+//        SharedPreferences.Editor editor = settings.edit();
+//        // Necessary to clear first if we save preferences onPause. 
+//        editor.clear();
+//        editor.putInt("selectedArea", selectedArea.getId());
+//        editor.commit();
+
+		saveAreas();
+	}
 	
 //	TODO: Zoom in on last selected area(?)	
 //	Save:
@@ -120,22 +173,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		}
 		return -1;
 	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		
-		// TODO: Save last selected area
-//		SharedPreferences settings = getSharedPreferences(PREFS_NAME,0);
-//        SharedPreferences.Editor editor = settings.edit();
-//        // Necessary to clear first if we save preferences onPause. 
-//        editor.clear();
-//        editor.putInt("selectedArea", selectedArea.getId());
-//        editor.commit();
-
-		saveAreas();
-	}
-
 
 	public boolean onTouch(View v, MotionEvent event) {
 		if (isEditing() < 0 && isEditMode) {

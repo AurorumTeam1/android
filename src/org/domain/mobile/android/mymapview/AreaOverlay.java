@@ -7,7 +7,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
@@ -19,8 +22,9 @@ public class AreaOverlay extends Overlay {
 
 	private int mId;
 	private String mName;
-	private String mDescription;
 	private String mOwner;
+	private String mDescription;
+	private int mColor = android.graphics.Color.GREEN;
 
 	public AreaOverlay(Context context) {
 		this.mContext = context;
@@ -68,7 +72,7 @@ public class AreaOverlay extends Overlay {
 		area.close();
 
 		Paint areaPaint = new Paint();
-		areaPaint.setColor(android.graphics.Color.GREEN);
+		areaPaint.setColor(mColor );
 		areaPaint.setStyle(Paint.Style.FILL);
 		areaPaint.setAntiAlias(true);
 		areaPaint.setAlpha(70);
@@ -81,6 +85,7 @@ public class AreaOverlay extends Overlay {
 		canvas.drawPath(area, areaPaint);
 	}
 
+	
 	public ArrayList<GeoPoint> getPoints() {
 		return mPoints;
 	}
@@ -109,21 +114,21 @@ public class AreaOverlay extends Overlay {
 		return isInside;
 	}
 
+	public int getId() {
+		// TODO Auto-generated method stub
+		return mId;
+	}
 	
+	public void setId(int id) {
+		this.mId = id;
+	}
+
 	public String getName() {
 		return mName;
 	}
 
 	public void setName(String name) {
 		mName = name;
-	}
-
-	public String getDescription() {
-		return mDescription;
-	}
-
-	public void setDescription(String description) {
-		this.mDescription = description;
 	}
 
 	public String getOwner() {
@@ -134,13 +139,20 @@ public class AreaOverlay extends Overlay {
 		this.mOwner = owner;
 	}
 
-	public int getId() {
-		// TODO Auto-generated method stub
-		return mId;
+	public String getDescription() {
+		return mDescription;
 	}
-	
-	public void setId(int id) {
-		this.mId = id;
+
+	public void setDescription(String description) {
+		this.mDescription = description;
 	}
+
+	public int getColor() {
+		return mColor;
+	}
+
+	public void setColor(int color) {
+		mColor = color;
+ 	}
 
 }

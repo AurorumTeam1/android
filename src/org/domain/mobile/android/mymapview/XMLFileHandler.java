@@ -115,6 +115,9 @@ public class XMLFileHandler extends BaseFileHandler {
 				serializer.startTag("", NAME);
 				serializer.text(area.getName());
 				serializer.endTag("", NAME);
+				serializer.startTag("", OWNER);
+				serializer.text(area.getOwner());
+				serializer.endTag("", OWNER);
 				serializer.startTag("", DESCRIPTION);
 				serializer.text(area.getDescription());
 				serializer.endTag("", DESCRIPTION);

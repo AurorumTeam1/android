@@ -333,26 +333,33 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	}
 
 	public void showDetails(AreaOverlay areaOverlay) {
-		selectedArea = areaOverlay;
 		showMainActionBar();
 		if (((View) findViewById(R.id.details_edit_overlay)).isShown()) {
 			hideDetailsEdit();
 		}
 		if (areaOverlay != null) {
+			selectedArea = areaOverlay;
 			((AreaDetailsView) findViewById(R.id.details_overlay)).setFields(areaOverlay);
+			((AreaDetailsEditView) findViewById(R.id.details_edit_overlay)).setFields(selectedArea);
 			((View) findViewById(R.id.new_button)).setVisibility(View.GONE);
 			((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
 			((View) findViewById(R.id.edit_button)).setVisibility(View.VISIBLE);
 			((View) findViewById(R.id.details_overlay)).setVisibility(View.VISIBLE);
 		}
+		else {
+			selectedArea = null;
+		}
 	}
 
 	public void hideDetails() {
-		hideDetailsEdit();
-		showMainActionBar();
-		((View) findViewById(R.id.details_overlay)).setVisibility(View.GONE);
-		((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
-		((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
+		if (selectedArea != null) {
+			hideDetailsEdit();
+			showMainActionBar();
+			((View) findViewById(R.id.details_overlay)).setVisibility(View.GONE);
+			((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
+			((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
+			selectedArea = null;
+		}
 	}
 
 	protected void showDetailsEdit() {
@@ -369,7 +376,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
 			((View) findViewById(R.id.done_button)).setVisibility(View.VISIBLE);
 			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.VISIBLE);
-			((TextView) findViewById(R.id.area_details_name_edit)).setText(selectedArea.getName());
 		}
 		else {
 			Toast.makeText(mapView.getContext(), "No area selected", Toast.LENGTH_SHORT).show();
@@ -379,6 +385,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	protected void hideDetailsEdit() {
 		if (selectedArea != null) {
 			((AreaDetailsEditView) findViewById(R.id.details_edit_overlay)).getFields(selectedArea);
+			((AreaDetailsView) findViewById(R.id.details_overlay)).setFields(selectedArea);
 			((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
 			((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
 			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.GONE);

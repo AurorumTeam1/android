@@ -26,7 +26,8 @@ public class XMLFileHandler extends BaseFileHandler {
 	static final String AREAS = AREA + "s";
 	static final String ID = "id";
 	static final String NAME = "name";
-//	static final String DESCRIPTION = "description";
+	static final String OWNER = "owner";
+	static final String DESCRIPTION = "description";
 	static final String POINT = "point";
 	static final String POINTS = POINT + "s";
 	static final String LATITUDE = "latitude";
@@ -82,8 +83,10 @@ public class XMLFileHandler extends BaseFileHandler {
 						}
 					} else if (name.equalsIgnoreCase(NAME)) {
 						area.setName(property.getTextContent());
-//					} else if (name.equalsIgnoreCase(DESCRIPTION)) {
-//						area.setDescription(property.getTextContent());
+					} else if (name.equalsIgnoreCase(OWNER)) {
+						area.setOwner(property.getTextContent());
+					} else if (name.equalsIgnoreCase(DESCRIPTION)) {
+						area.setDescription(property.getTextContent());
 					}
 				}
 				areas.add(area);
@@ -112,9 +115,9 @@ public class XMLFileHandler extends BaseFileHandler {
 				serializer.startTag("", NAME);
 				serializer.text(area.getName());
 				serializer.endTag("", NAME);
-//				serializer.startTag("", DESCRIPTION);
-//				serializer.text(area.getDescription());
-//				serializer.endTag("", DESCRIPTION);
+				serializer.startTag("", DESCRIPTION);
+				serializer.text(area.getDescription());
+				serializer.endTag("", DESCRIPTION);
 				serializer.startTag("", POINTS);
 				points = area.getPoints();
 				for (int i = 0; i < points.size(); i++) {

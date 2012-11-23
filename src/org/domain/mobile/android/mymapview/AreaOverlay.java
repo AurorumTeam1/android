@@ -31,7 +31,7 @@ public class AreaOverlay extends Overlay {
 	public AreaOverlay(Context context, int id) {
 		this(context);
 		setId(id);
-		setName(String.valueOf(id));
+		setName(String.valueOf("Area " + id));
 	}
 
 	public AreaOverlay addPoint(GeoPoint point) {
@@ -46,7 +46,7 @@ public class AreaOverlay extends Overlay {
 			return true;
 		}
 		else {
-			((MyMapViewActivity) mContext).hideAreaDetails(); 	
+			((MyMapViewActivity) mContext).hideDetails(); 	
 			return false;
 		}
 	}

@@ -34,6 +34,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	private boolean isDrag = false;
 	private PositionOverlay mMyLocationOverlay;
 	private boolean isEditMode = false;
+	private AreaOverlay selectedArea;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -57,7 +58,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		findViewById(R.id.cancel_button).setEnabled(false);
 		findViewById(R.id.ok_button).setEnabled(false);
 
-		loadArea();
+		loadAreas();
 	}
 
 	
@@ -87,16 +88,17 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 				break;
 			case R.id.edit_button:
 			case R.id.details_overlay:
-				showDetailsEditOverlay();
+				showDetailsEdit();
 				break;
 			case R.id.done_button:
-				hideDetailsEditOverlay();
+				hideDetailsEdit();
+				showDetails(selectedArea);
 				break;
 			case R.id.ok_button:
 				findViewById(R.id.cancel_button).setEnabled(true);
 				findViewById(R.id.ok_button).setEnabled(false);
 				hideMarkers();
-				saveArea();
+				saveAreas();
 				showMainActionBar();
 				break;
 			case R.id.cancel_button:
@@ -108,7 +110,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			}
 		}
 	};
-	private AreaOverlay selectedArea;
 	
 	private int isEditing() {
 		List<Overlay> overlays = mapView.getOverlays();
@@ -124,12 +125,15 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	protected void onPause() {
 		super.onPause();
 		
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME,0);
-        SharedPreferences.Editor editor = settings.edit();
-        // Necessary to clear first if we save preferences onPause. 
-        editor.clear();
-        editor.putInt("selectedArea", selectedArea.getId());
-        editor.commit();
+		// TODO: Save last selected area
+//		SharedPreferences settings = getSharedPreferences(PREFS_NAME,0);
+//        SharedPreferences.Editor editor = settings.edit();
+//        // Necessary to clear first if we save preferences onPause. 
+//        editor.clear();
+//        editor.putInt("selectedArea", selectedArea.getId());
+//        editor.commit();
+
+		saveAreas();
 	}
 
 
@@ -169,7 +173,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		return false;
 	}
 
-	protected void saveArea() {
+	protected void saveAreas() {
 		if (mapView.getOverlays().size() == 0) {
 			return;
 		}
@@ -188,7 +192,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		}
 	}
 
-	private void loadArea() {
+	private void loadAreas() {
 		try {
 			AreaParser parser = new XMLFileHandler(this, getExternalFilesDir(null).getAbsolutePath(), "areas.xml");
 			List<AreaOverlay> areas = parser.parse();
@@ -313,30 +317,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 
 	}
 
-	public void showDetails(AreaOverlay areaOverlay) {
-		selectedArea = areaOverlay;
-		showMainActionBar();
-		if (areaOverlay != null) {
-			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.GONE);
-			((TextView) findViewById(R.id.area_details_name)).setText(areaOverlay.getName());
-			((View) findViewById(R.id.new_button)).setVisibility(View.GONE);
-			((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
-			((View) findViewById(R.id.edit_button)).setVisibility(View.VISIBLE);
-			((View) findViewById(R.id.details_overlay)).setVisibility(View.VISIBLE);
-			((AreaDetailsView) findViewById(R.id.details_overlay)).setFields(areaOverlay);
-		}
-	}
-
-	public void hideAreaDetails() {
-		selectedArea = null;
-		((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.GONE);
-		((View) findViewById(R.id.details_overlay)).setVisibility(View.GONE);
-		((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
-		((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
-		((View) findViewById(R.id.new_button)).setVisibility(View.VISIBLE);
-	}
-
-	
 	private void showEditActionbar() {
 		isEditMode = true;
 		findViewById(R.id.main_actionbar).setVisibility(View.GONE);
@@ -352,7 +332,30 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		findViewById(R.id.main_actionbar).setVisibility(View.VISIBLE);
 	}
 
-	protected void showDetailsEditOverlay() {
+	public void showDetails(AreaOverlay areaOverlay) {
+		selectedArea = areaOverlay;
+		showMainActionBar();
+		if (((View) findViewById(R.id.details_edit_overlay)).isShown()) {
+			hideDetailsEdit();
+		}
+		if (areaOverlay != null) {
+			((AreaDetailsView) findViewById(R.id.details_overlay)).setFields(areaOverlay);
+			((View) findViewById(R.id.new_button)).setVisibility(View.GONE);
+			((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
+			((View) findViewById(R.id.edit_button)).setVisibility(View.VISIBLE);
+			((View) findViewById(R.id.details_overlay)).setVisibility(View.VISIBLE);
+		}
+	}
+
+	public void hideDetails() {
+		hideDetailsEdit();
+		showMainActionBar();
+		((View) findViewById(R.id.details_overlay)).setVisibility(View.GONE);
+		((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
+		((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
+	}
+
+	protected void showDetailsEdit() {
 		if (selectedArea != null) {
 			//TODO: Fix zooming!
 			centerOnOverlay(selectedArea.getPoints(), 1.5);
@@ -364,7 +367,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			findViewById(R.id.main_actionbar).setBackgroundColor(getResources().getColor(R.color.edit_overlay_background));
 			((TextView)findViewById(R.id.actionbar_title)).setTextColor(getResources().getColor(R.color.text_dark));
 			((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
-			((View) findViewById(R.id.details_overlay)).setVisibility(View.GONE);
 			((View) findViewById(R.id.done_button)).setVisibility(View.VISIBLE);
 			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.VISIBLE);
 			((TextView) findViewById(R.id.area_details_name_edit)).setText(selectedArea.getName());
@@ -374,12 +376,12 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		}
 	}
 
-	protected void hideDetailsEditOverlay() {
-		((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
-		((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
-		((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.GONE);
-		((View) findViewById(R.id.details_overlay)).setVisibility(View.VISIBLE);
-		((AreaDetailsEditView) findViewById(R.id.details_edit_overlay)).getFields(selectedArea);
-		showDetails(selectedArea);
+	protected void hideDetailsEdit() {
+		if (selectedArea != null) {
+			((AreaDetailsEditView) findViewById(R.id.details_edit_overlay)).getFields(selectedArea);
+			((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
+			((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
+			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.GONE);
+		}
 	}
 }

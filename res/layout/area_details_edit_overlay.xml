@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<org.domain.mobile.android.mymapview.AreaDetailsEditView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<org.domain.mobile.android.mymapview.AreaDetailsEditView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/details_edit_overlay"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -16,7 +14,8 @@
         android:orientation="horizontal"
         android:showDividers="middle"
         android:visibility="visible" >
-                <EditText
+
+        <EditText
             android:id="@+id/area_details_name_edit"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -25,11 +24,12 @@
             android:inputType="text"
             android:maxLines="1"
             android:padding="12dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/area_default_name"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/text_dark"
             android:textStyle="bold" />
-        <EditText
+
+        <EditText
             android:id="@+id/area_details_owner_edit"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -38,30 +38,21 @@
             android:inputType="text"
             android:maxLines="1"
             android:padding="12dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/area_default_owner"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/text_dark"
             android:textStyle="bold" />
-
     </LinearLayout>
-
-    <Spinner
-        android:id="@+id/spinner1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-		android:prompt="@string/area_prompt"
-        android:entries="@array/area_array" />
 
     <EditText
         android:id="@+id/area_details_description_edit"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:inputType="textMultiLine"
         android:lines="10"
         android:padding="12dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/area_default_description"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/text_dark" />
 
 </org.domain.mobile.android.mymapview.AreaDetailsEditView>

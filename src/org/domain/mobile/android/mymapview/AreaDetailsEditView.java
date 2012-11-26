@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -27,6 +28,11 @@ public class AreaDetailsEditView extends LinearLayout {
 		((EditText)findViewById(R.id.area_details_name_edit)).setText(areaOverlay.getName());
 		((EditText)findViewById(R.id.area_details_owner_edit)).setText(areaOverlay.getOwner());
 		((EditText)findViewById(R.id.area_details_description_edit)).setText(areaOverlay.getDescription());
+		// TODO: Fix color array handling...
+//		Spinner colorSpinner = (Spinner) this.findViewById(R.id.color_spinner);
+//		ArrayAdapter myAdap = (ArrayAdapter) colorSpinner.getAdapter();
+//		int spinnerPosition = myAdap.getPosition(String.valueOf(areaOverlay.getColor()));
+//		colorSpinner.setSelection(spinnerPosition);
 	}
 	
 	public void getFields(AreaOverlay areaOverlay) {

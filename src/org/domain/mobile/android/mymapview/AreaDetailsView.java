@@ -3,7 +3,9 @@ package org.domain.mobile.android.mymapview;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class AreaDetailsView extends LinearLayout {

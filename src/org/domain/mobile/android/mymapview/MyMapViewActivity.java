@@ -377,7 +377,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		if (areaOverlay != null) {
 			selectedArea = areaOverlay;
 			((AreaDetailsView) findViewById(R.id.details_overlay)).setFields(areaOverlay);
-			((AreaDetailsEditView) findViewById(R.id.details_edit_overlay)).setFields(selectedArea);
+//			((AreaDetailsEditView) findViewById(R.id.details_edit_overlay)).setFields(selectedArea);
 			((View) findViewById(R.id.new_button)).setVisibility(View.GONE);
 			((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
 			((View) findViewById(R.id.edit_button)).setVisibility(View.VISIBLE);

@@ -384,8 +384,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		}
 		if (areaOverlay != null) {
 			selectedArea = areaOverlay;
-			((AreaDetailsView) findViewById(R.id.details_overlay)).setFields(areaOverlay);
-//			((AreaDetailsEditView) findViewById(R.id.details_edit_overlay)).setFields(selectedArea);
 			((View) findViewById(R.id.new_button)).setVisibility(View.GONE);
 			((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
 			((View) findViewById(R.id.edit_button)).setVisibility(View.VISIBLE);
@@ -408,16 +406,14 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	}
 
 	protected void showDetailsEdit() {
+		((View) findViewById(R.id.details_overlay)).setVisibility(View.GONE);
 		if (selectedArea != null) {
 			//TODO: Fix zooming to fit area in visible space!
 			centerOnOverlay(selectedArea.getPoints(), 1.0);
 
-			//Get fields from object
-			((AreaDetailsEditView) findViewById(R.id.details_edit_overlay)).setFields(selectedArea);
-			
 			//Set colors and visibility
-//			findViewById(R.id.main_actionbar).setBackgroundColor(getResources().getColor(R.color.edit_overlay_background));
-//			((TextView)findViewById(R.id.actionbar_title)).setTextColor(getResources().getColor(R.color.text_dark));
+			findViewById(R.id.main_actionbar).setBackgroundColor(getResources().getColor(R.color.edit_overlay_background));
+			((TextView)findViewById(R.id.actionbar_title)).setTextColor(getResources().getColor(R.color.text_dark));
 			((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
 			((View) findViewById(R.id.done_button)).setVisibility(View.VISIBLE);
 			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.VISIBLE);
@@ -429,11 +425,13 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 
 	protected void hideDetailsEdit() {
 		if (selectedArea != null) {
-			((AreaDetailsEditView) findViewById(R.id.details_edit_overlay)).getFields(selectedArea);
-			((AreaDetailsView) findViewById(R.id.details_overlay)).setFields(selectedArea);
 			((View) findViewById(R.id.done_button)).setVisibility(View.GONE);
 			((View) findViewById(R.id.edit_button)).setVisibility(View.GONE);
 			((View) findViewById(R.id.details_edit_overlay)).setVisibility(View.GONE);
 		}
+	}
+
+	public AreaOverlay getSelectedArea() {
+		return selectedArea;
 	}
 }

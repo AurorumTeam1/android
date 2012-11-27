@@ -28,33 +28,34 @@ public class AreaDetailsEditView extends LinearLayout {
 	
 	@Override
 	protected void onVisibilityChanged(View changedView, int visibility) {
-		if (visibility == View.GONE)
+		if (visibility == View.GONE || visibility == View.INVISIBLE)
 		{
 			InputMethodManager imm = (InputMethodManager) getContext().getSystemService(
 				      Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(this.getWindowToken(), 0);
-				
-				//TODO: Move all setting of fields to here!
-				
-		}
-		super.onVisibilityChanged(changedView, visibility);
-	}
 
-	public void setFields(AreaOverlay areaOverlay) {
-		((EditText)findViewById(R.id.area_details_name_edit)).setText(areaOverlay.getName());
-		((EditText)findViewById(R.id.area_details_owner_edit)).setText(areaOverlay.getOwner());
-		((EditText)findViewById(R.id.area_details_description_edit)).setText(areaOverlay.getDescription());
-		// TODO: Fix color array handling...
-//		Spinner colorSpinner = (Spinner) this.findViewById(R.id.color_spinner);
-//		ArrayAdapter myAdap = (ArrayAdapter) colorSpinner.getAdapter();
-//		int spinnerPosition = myAdap.getPosition(String.valueOf(areaOverlay.getColor()));
-//		colorSpinner.setSelection(spinnerPosition);
-	}
-	
-	public void getFields(AreaOverlay areaOverlay) {
-		areaOverlay.setName(((EditText)findViewById(R.id.area_details_name_edit)).getText().toString());
-		areaOverlay.setOwner(((EditText)findViewById(R.id.area_details_owner_edit)).getText().toString());
-		areaOverlay.setDescription(((EditText)findViewById(R.id.area_details_description_edit)).getText().toString());
+				AreaOverlay area = ((MyMapViewActivity)getContext()).getSelectedArea();
+				if (area != null) {
+					area.setName(((EditText)findViewById(R.id.area_details_name_edit)).getText().toString());
+					area.setOwner(((EditText)findViewById(R.id.area_details_owner_edit)).getText().toString());
+					area.setDescription(((EditText)findViewById(R.id.area_details_description_edit)).getText().toString());
+				}
+		}
+		else if (visibility == View.VISIBLE) {
+			AreaOverlay area = ((MyMapViewActivity)getContext()).getSelectedArea();
+			if (area != null) {
+				((EditText)findViewById(R.id.area_details_name_edit)).setText(area.getName());
+				((EditText)findViewById(R.id.area_details_owner_edit)).setText(area.getOwner());
+				((EditText)findViewById(R.id.area_details_description_edit)).setText(area.getDescription());
+				// TODO: Fix color array handling...
+//				Spinner colorSpinner = (Spinner) this.findViewById(R.id.color_spinner);
+//				ArrayAdapter myAdap = (ArrayAdapter) colorSpinner.getAdapter();
+//				int spinnerPosition = myAdap.getPosition(String.valueOf(areaOverlay.getColor()));
+//				colorSpinner.setSelection(spinnerPosition);
+			}
+		}
+		
+		super.onVisibilityChanged(changedView, visibility);
 	}
 
 }

@@ -3,6 +3,7 @@ package org.domain.mobile.android.mymapview;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -19,9 +20,16 @@ public class AreaDetailsView extends LinearLayout {
 		super.onDraw(canvas);
 	}
 	
-	public void setFields(AreaOverlay areaOverlay) {
-		((TextView)findViewById(R.id.area_details_name)).setText(areaOverlay.getName());
-		((TextView)findViewById(R.id.area_details_owner)).setText(areaOverlay.getOwner());
-		((TextView)findViewById(R.id.area_details_description)).setText(areaOverlay.getDescription());
+	@Override
+	protected void onVisibilityChanged(View changedView, int visibility) {
+		if (visibility == View.VISIBLE)
+		{
+			AreaOverlay area = ((MyMapViewActivity)getContext()).getSelectedArea();
+			if (area != null) {
+				((TextView)findViewById(R.id.area_details_name)).setText(area.getName());
+				((TextView)findViewById(R.id.area_details_owner)).setText(area.getOwner());
+				((TextView)findViewById(R.id.area_details_description)).setText(area.getDescription());
+			}
+		}
 	}
 }

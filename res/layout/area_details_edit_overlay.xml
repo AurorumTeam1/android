@@ -48,6 +48,7 @@
         android:id="@+id/area_details_description_edit"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="top"
         android:inputType="textMultiLine"
         android:lines="10"
         android:padding="12dp"

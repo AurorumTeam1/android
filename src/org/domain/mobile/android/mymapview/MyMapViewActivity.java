@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.NetworkInfo.DetailedState;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -241,7 +243,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 			List<AreaOverlay> areas = parser.parse();
 			if (areas.size() > 0) {
 				mapView.getOverlays().addAll(areas);
-				centerOnOverlay(areas.get(areas.size() - 1).getPoints(), 1);
+				centerOnOverlay(areas.get(areas.size() - 1).getPoints(), 1.0);
 			}
 			findViewById(R.id.cancel_button).setEnabled(true);
 		} catch (Exception e) {
@@ -408,7 +410,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	protected void showDetailsEdit() {
 		if (selectedArea != null) {
 			//TODO: Fix zooming to fit area in visible space!
-			centerOnOverlay(selectedArea.getPoints(), 1.5);
+			centerOnOverlay(selectedArea.getPoints(), 1.0);
 
 			//Get fields from object
 			((AreaDetailsEditView) findViewById(R.id.details_edit_overlay)).setFields(selectedArea);

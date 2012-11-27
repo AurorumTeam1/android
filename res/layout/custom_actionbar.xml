@@ -60,7 +60,6 @@
             android:text="@string/btn_done"
             android:textAppearance="?android:attr/actionMenuTextAppearance"
             android:textColor="@color/text_dark"
-	    	android:background="@color/edit_overlay_background"
             android:visibility="gone" />
         
     </LinearLayout>

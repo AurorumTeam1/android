@@ -69,6 +69,7 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		// TODO: Zoom to selected area
 		
 		// Handle color spinner
+		// TODO: Fix this fulhack!
 		((Spinner) findViewById(R.id.color_spinner)).setOnItemSelectedListener(
 				new OnItemSelectedListener() {
 					@Override
@@ -77,18 +78,23 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 				        switch (pos) {
 						case 0:
 							selectedArea.setColor(android.graphics.Color.GREEN);
+							mapView.postInvalidate();
 							break;
 						case 1:
 							selectedArea.setColor(android.graphics.Color.RED);
+							mapView.postInvalidate();
 							break;
 						case 2:
 							selectedArea.setColor(android.graphics.Color.BLUE);
+							mapView.postInvalidate();
 							break;
 						case 3:
 							selectedArea.setColor(android.graphics.Color.YELLOW);
+							mapView.postInvalidate();
 							break;
 						default:
 							selectedArea.setColor(android.graphics.Color.GREEN);
+							mapView.postInvalidate();
 							break;
 						}
 					}

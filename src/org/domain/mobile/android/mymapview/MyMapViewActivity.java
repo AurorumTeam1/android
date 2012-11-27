@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.NetworkInfo.DetailedState;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,7 +13,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -218,6 +214,17 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		return false;
 	}
 
+//	@Override
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+// TODO: Fix hiding edit overlay on back key 
+//	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+//			hideDetailsEdit();
+//	    }
+//	    return true;
+//	    return super.onKeyDown(keyCode, event);
+//	}
+
+	
 	protected void saveAreas() {
 		if (mapView.getOverlays().size() == 0) {
 			return;
@@ -377,6 +384,11 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		findViewById(R.id.main_actionbar).setVisibility(View.VISIBLE);
 	}
 
+	
+	/**
+	 * Show the details overlay on top of mapview when an area is selected
+	 * @param areaOverlay
+	 */
 	public void showDetails(AreaOverlay areaOverlay) {
 		showMainActionBar();
 		if (((View) findViewById(R.id.details_edit_overlay)).isShown()) {
@@ -394,6 +406,9 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		}
 	}
 
+	/**
+	 * Hide details overlay
+	 */
 	public void hideDetails() {
 		if (selectedArea != null) {
 			hideDetailsEdit();
@@ -405,6 +420,9 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		}
 	}
 
+	/**
+	 * Show the details editing overlay
+	 */
 	protected void showDetailsEdit() {
 		((View) findViewById(R.id.details_overlay)).setVisibility(View.GONE);
 		if (selectedArea != null) {
@@ -423,6 +441,9 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 		}
 	}
 
+	/**
+	 * Hide the details editing overlay
+	 */
 	protected void hideDetailsEdit() {
 		if (selectedArea != null) {
 			((View) findViewById(R.id.done_button)).setVisibility(View.GONE);

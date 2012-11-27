@@ -434,4 +434,18 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	public AreaOverlay getSelectedArea() {
 		return selectedArea;
 	}
+
+	public void disableMapView() {
+		if (mapView != null) {
+			mapView.setFocusable(false);
+			mapView.setClickable(false);
+		}
+	}
+
+	public void enableMapView() {
+		if (mapView != null) {
+			mapView.setFocusable(true);
+			mapView.setClickable(true);
+		}
+	}
 }

@@ -28,8 +28,9 @@ public class AreaDetailsEditView extends LinearLayout {
 	
 	@Override
 	protected void onVisibilityChanged(View changedView, int visibility) {
-		if (visibility == View.GONE || visibility == View.INVISIBLE)
+		if (changedView == this && visibility == View.GONE)
 		{
+			((MyMapViewActivity)getContext()).enableMapView();
 			InputMethodManager imm = (InputMethodManager) getContext().getSystemService(
 				      Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(this.getWindowToken(), 0);
@@ -41,7 +42,9 @@ public class AreaDetailsEditView extends LinearLayout {
 					area.setDescription(((EditText)findViewById(R.id.area_details_description_edit)).getText().toString());
 				}
 		}
-		else if (visibility == View.VISIBLE) {
+		else if (changedView == this && visibility == View.VISIBLE) {
+			((MyMapViewActivity)getContext()).disableMapView();
+
 			AreaOverlay area = ((MyMapViewActivity)getContext()).getSelectedArea();
 			if (area != null) {
 				((EditText)findViewById(R.id.area_details_name_edit)).setText(area.getName());

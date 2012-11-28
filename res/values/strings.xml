@@ -11,18 +11,20 @@
     <string name="loading">Loading</string>
     <string name="add_new_marker">Add Your Position</string>
     <string name="clear_all_areas">Clear all areas</string>
-    <string name="area_default_name">Area Name</string>
-    <string name="area_default_owner">Area Owner</string>
-    <string name="area_default_description">Area Description</string>
+    <string name="area_name_label">Area Name</string>
+    <string name="area_owner_label">Area Owner</string>
+    <string name="area_description_label">Area Description</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_area_details">AreaDetailsActivity</string>
-
     <string name="color_prompt">Choose color</string>
+
     <string-array name="color_array">
         <item>Green</item>
         <item>Red</item>
         <item>Blue</item>
         <item>Yellow</item>
     </string-array>
-    
+
+    <string name="title_activity_area_details_edit">Edit Area Details</string>
+
 </resources>

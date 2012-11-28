@@ -25,7 +25,7 @@
             android:drawablePadding="0dp"
             android:maxLines="1"
             android:padding="12dp"
-            android:text="@string/area_default_name"
+            android:text="@string/area_name_label"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold"
             android:textColor="@color/text" />
@@ -38,7 +38,7 @@
             android:drawablePadding="0dp"
             android:maxLines="1"
             android:padding="12dp"
-            android:text="@string/area_default_owner"
+            android:text="@string/area_owner_label"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold"
             android:textColor="@color/text" />

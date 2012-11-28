@@ -1,0 +1,65 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AreaDetailsEditActivity" >
+
+    <LinearLayout
+        android:id="@+id/edit_area_actionbar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/actionbar_compat_height"
+        android:background="@color/bar_background"
+        android:divider="?android:attr/dividerVertical"
+        android:dividerPadding="12dip"
+        android:orientation="horizontal"
+        android:showDividers="middle" >
+
+        <Button
+            android:id="@+id/cancel_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:drawablePadding="0dp"
+            android:maxLines="1"
+            android:text="@string/discard_label"
+            android:textAppearance="?android:attr/actionMenuTextAppearance"
+            android:textColor="@color/text" />
+
+        <Button
+            android:id="@+id/ok_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:filterTouchesWhenObscured="true"
+            android:maxLines="1"
+            android:text="@string/save_label"
+            android:textAppearance="?android:attr/actionMenuTextAppearance"
+            android:textColor="@color/text" />
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="0dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="12dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/area_name_label" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

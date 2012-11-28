@@ -1,19 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="ButtonText">
-        <item name="android:textColor">#00ff00</item>
-        <item name="android:textSize">12sp</item>
+    <style name="AppTheme" parent="@style/CompatTheme">
+
+        <!-- Set default appearances by referencing styles below -->
+        <!-- (see: http://www.therealjoshua.com/2012/01/styling-android-with-defaults/) -->
+        <item name="android:textAppearance">@style/TextAppearance</item>
+        <item name="android:buttonStyle">@style/Button</item>
+        <item name="android:editTextStyle">@style/EditText</item>
+        
+        
     </style>
 
+    <!-- These are used as default styles, referenced from the theme above -->
+    <!-- No need to tag these directly -->
+	<style name="TextAppearance" parent="@android:style/TextAppearance">
+	    <item name="android:textColor">?android:attr/textColorPrimary</item>
+	    <item name="android:textStyle">italic</item>
+	</style>
+
+    <style name="Button" parent="@android:style/Widget.Button">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="EditText" parent="@android:style/Widget.EditText">
+	    <item name="android:textColor">?android:attr/textColorPrimary</item>
+	    <item name="android:textStyle">italic</item>
+        <item name="android:textSize">16sp</item>
+  	</style>
 	
-	<style name="TextAppearance.Widget.ActionBar.Title"
+    <!-- end of default styles -->
+
+
+
+	
+	<style name="ActionBarTitle"
 	       parent="@android:style/TextAppearance.Medium">
         <item name="android:textColor">#ffffffff</item>
 	</style>
 	
-	<style name="TextAppearance.Widget.ActionBar.Subtitle"
-	       parent="@android:style/TextAppearance.Small">
-	</style>
-	
+		
 </resources>

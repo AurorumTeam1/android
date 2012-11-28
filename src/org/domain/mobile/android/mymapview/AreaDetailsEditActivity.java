@@ -10,7 +10,6 @@ public class AreaDetailsEditActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.area_details_edit);
-		getActionBar().hide();
 	}
 
 	@Override

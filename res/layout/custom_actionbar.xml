@@ -19,7 +19,7 @@
 
         <TextView
             android:id="@+id/actionbar_title"
-            style="@style/TextAppearance.Widget.ActionBar.Title"
+            style="@style/ActionBarTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

@@ -40,10 +40,6 @@ public class MyMapViewActivity extends MapActivity implements OnTouchListener {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		ActionBar actionBar = getActionBar();
-		actionBar.hide(); // Hide the actionbar in the area editing mode!
-		// (Should be visible in main app when it is
-		// implemented.)
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		mapView = (MapView) findViewById(R.id.mapview);
